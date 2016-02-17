@@ -7,7 +7,7 @@ Repositório criado para armazenar os exercicios do módulo de Mongodb do [Works
 
  - [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit?pli=1#slide=id.p)
  - [Vídeo](https://www.youtube.com/watch?time_continue=91&v=OgfO37F6mdg)
- - [Descrição do exercício]()
+ - [Descrição do exercício](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/classes/nodejs/exercises/class-01.md)
  - [Resolução do exercício]()
 
 #### Resumo:
@@ -56,7 +56,8 @@ Repositório criado para armazenar os exercicios do módulo de Mongodb do [Works
 
             Thread Pool
                 -> tamanho fixo
-                -> ~ array bidimentsional [# tasks, tasks completadas]
+                -> ~ array bidimentsional [fila de tasks, fila de tasks completadas]
+                -> as threads no nodejs são "idle threads" responsável por um I/O, ou seja elas são pré-executadas, e ficam aguardando uma task
                 -> 1 tasks por thread (idle, i/o) da thread pool
                 -> proporciona menor gasto de memória
 
@@ -65,11 +66,20 @@ Repositório criado para armazenar os exercicios do módulo de Mongodb do [Works
                 -> GUI Pattern
                 -> simplificam a programação assíncrona
                 -> diminui o aninhamento de callback
-                -> eventos podem ser emitidos (para um listener) quando uma tarefa esta pronta
+                -> eventos(emit) podem ser emitidos (para um listener(on)) quando uma tarefa esta pronta
                 -> callback pattern
                 -> high-order functions (programação funcional)
 
-            use casa PayPal
+            Use Case - PayPal
+              -> 2013
+              -> java --> nodejs
+              -> cracken
+              -> tempo de construção: 2 vezes mais rápido, com menos pessoas
+              -> 33% menos linhas de códigp
+              -> 40% menos arquivos
+              -> dobro de requests/segundo em comparação com java
+              -> 35% mais rápido tempo médio de resposta por página
+
 
             Instalação
             -> node v5
@@ -78,9 +88,6 @@ Repositório criado para armazenar os exercicios do módulo de Mongodb do [Works
             yum:
                 sudo yum install nodejs npm --enablerepo=epel
                 http://tecadmin.net/upgrade-nodejs-via-npm/
-
-
-
 
 ```
 Exemplo

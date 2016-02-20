@@ -65,7 +65,7 @@ Mas este limite de quantidade de `threads` pode ser alterado, através da variá
 
 ## Como você venderia o peixe do Node.js na sua empresa para tentar convencer seu chefe da sua adoção?
 
-Primeiramente eu destacaria o Ganho de performance, com alguns exemplos, apresentando isto em números, e depois mostraria algum caso de uso (como o do Paypal), e destacaria as empresas que já adotam esta tecnologia, como por exemplo Netflix, Linkedin, Soundcloud, Uber, Cloud9, yahoo, microsoft, trello, pagar.me, walmart, rdio, etc.
+Primeiramente eu destacaria o Ganho de performance, com alguns exemplos, apresentando isto em números, e depois mostraria algum caso de uso (como o do Paypal), e destacaria as empresas que já adotam esta tecnologia, como por exemplo Netflix, Linkedin, Soundcloud, Uber, Cloud9, Yahoo, Microsoft, Trello, Pagar.me, Walmart, Rdio, etc.
 
 Então, abordaria que o foco das aplicações desenvolvidas com Node.js é de obter alta concorrência, alta escalabilidade e de criar aplicações `real-time`. E que no Node.js o
 Backend e Frontend possuem mesma linguagem, permitindo uma integração total do sistema, e facilitando o desenvolvimento.

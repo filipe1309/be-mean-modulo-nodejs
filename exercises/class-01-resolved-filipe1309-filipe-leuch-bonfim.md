@@ -55,7 +55,7 @@ Geralmente sistemas deste tipo são mais fáceis de programar e debugar, além d
 #### Multi-Thread
 Um sistema *multi-threaded* roda em vários processos no sistema operacional.
 
-Neste tipo de sistema há um ganho de performance se este for executado em uma máquina com múltiplos núcleos, pois cada thread pode ser executada um núcleo diferente, ou seja, de maneira paralela.
+Neste tipo de sistema há um ganho de performance, se este for executado em uma máquina com múltiplos núcleos, pois cada thread pode ser executada em um núcleo diferente, ou seja, de maneira paralela.
 
 ## Como a Thread Pool tem um tamanho padrão de 4, o que acontece se você enviar 5 requisições ao banco?
 

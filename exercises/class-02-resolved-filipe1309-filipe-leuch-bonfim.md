@@ -10,7 +10,7 @@
 
 
 ## Para que foram inventados os Status Codes? Dê exemplo de 1 código por grupo e a imagem do [Cat Status Code](https://http.cat/).
-Os `Status Codes` foram inventados com o intuito de padronizar os retornos das requisições entre o cliente e o servidor, assim podendo ser util para ajudar a identificar a causa de problemas quando uma página web ou outro recurso não carrega como deveria.
+Os `Status Codes` foram inventados com o intuito de padronizar os retornos das requisições entre o cliente e o servidor, assim podendo ser útil para ajudar a identificar a causa de problemas quando uma página web ou outro recurso não carrega como deveria.
 
 #### 1XX - Informacional
 ![101](https://http.cat/101)
@@ -29,7 +29,7 @@ Os `Status Codes` foram inventados com o intuito de padronizar os retornos das r
 
 ## Explique o que é cada parâmetro da função recebida no `createServer`.
 #### Request
-O `request` é um objeto que contêm informações sobre o `request` emitido pelo cliete, como por exemplo o cabeçalho HTTP, a URL, etc.
+O `request` é um objeto que contêm informações sobre o `request` emitido pelo cliente, como por exemplo o cabeçalho HTTP, a URL, etc.
 
 #### Response
 O `responce` é um objeto, com diversos métodos, utilizado para retornar dados para o cliente.

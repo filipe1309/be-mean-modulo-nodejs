@@ -413,7 +413,7 @@ function callback(res) {
   })
 }
 ```
-##### JSON
+###### JSON
  - JSON.stringify => objeto -> string
  - JSON.parse => string -> objeto
 

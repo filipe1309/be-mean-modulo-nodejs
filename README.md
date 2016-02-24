@@ -1,6 +1,6 @@
 # be-mean-modulo-nodejs
 
-Repositório criado para armazenar os exercicios do módulo de Mongodb do [Workshop de BE MEAN - Instagram](https://github.com/Webschool-io/be-mean-instagram), da [Webschool.io](https://github.com/Webschool-io)
+Repositório criado para armazenar os exercicios do módulo de Node.js do [Workshop de BE MEAN - Instagram](https://github.com/Webschool-io/be-mean-instagram), da [Webschool.io](https://github.com/Webschool-io)
 
 ### Aula 01
 #### [Explicação sobre o node](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/module-nodejs/pt-br/theory.md), [Callback](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/module-nodejs/pt-br/callback.md), [Instalação](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/module-nodejs/pt-br/installation.md)
@@ -143,7 +143,7 @@ undefined
  - [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gec2cb278a_0_23)
  - [Vídeo](https://www.youtube.com/watch?v=mDtNcosGgiU)
  - [Descrição do exercício](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/classes/nodejs/exercises/class-02.md)
- - [Resolução do exercício]()
+ - [Resolução do exercício](https://github.com/filipe1309/be-mean-modulo-nodejs/blob/master/exercises/class-02-resolved-filipe1309-filipe-leuch-bonfim.md)
 
 #### Resumo:
 ##### HTTP
@@ -163,7 +163,7 @@ undefined
     - PATCH - Usado para aplicar modificações parciais a um recurso.
     - CRUD do HTTP = [C = POST][R = GET][U = PUT][D = DELETE]
 
-#### Status Codes
+##### Status Codes
 - 3 dígitos
 - 1XX Informacional
 - 2XX Sucesso
@@ -171,13 +171,13 @@ undefined
 - 4XX Erro do cliente
 - 5XX Erro do servidor
 
-#### createServer
+##### createServer
 - inicia um servidor HTTP
 - 2 parâmetros
   - request
   - response
 
-##### hello-world.js
+###### hello-world.js
 ```js
 var http = require('http');
 
@@ -205,7 +205,7 @@ server.listen(3000, function(){
 
 ```
 
-##### hello-http.js
+###### hello-http.js
 ```js
 var http = require('http');
 
@@ -218,7 +218,7 @@ http.createServer(function(request, response){
 });
 ```
 
-##### index.html
+###### index.html
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -231,7 +231,7 @@ http.createServer(function(request, response){
 </body>
 </html>
 ```
-##### hello-html.js.
+###### hello-html.js.
 ```js
 var http = require('http')
   , fs = require('fs')
@@ -246,8 +246,8 @@ http.createServer(function(request, response){
 });
 ```
 
-#### Rotas
-##### server.js
+##### Rotas
+###### server.js
 ```js
 'use strict';
 
@@ -280,7 +280,7 @@ http.createServer(function(req, res){
 });
 ```
 
-##### Nodemon
+###### Nodemon
 - evita derrubar o servidor a cada atualização
 ```
 npm i -g nodemon
@@ -293,12 +293,12 @@ nodemon server.js
 6 Dec 16:05:26 - [nodemon] starting `node server.js`
 Servidor rodando em localhost:3000
 ```
-##### POSTMAN
-- estensção do crhome que será utilizado para testar a API implementada no curso
+###### POSTMAN
+- extensão do crhome que será utilizado para testar a API implementada no curso
 - GET = http://localhost:3000/api/v1
 
-#### QueryString
-##### hello-querystring.js
+##### QueryString
+###### hello-querystring.js
 ```js
 var http = require('http')
   , url = require('url');
@@ -322,6 +322,176 @@ http.createServer(function(request, response){
   console.log('Servidor rodando em localhost:3000');
 });
 ```
+
+### Aula 03
+#### [get, request, post, put ](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/module-nodejs/pt-br/http.md)
+
+ - [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gdb157531c_0_214)
+ - [Vídeo](https://www.youtube.com/watch?v=TpNofR3Axsk)
+ - [Descrição do exercício](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/classes/nodejs/exercises/class-03.md)
+ - [Resolução do exercício]()
+
+#### Resumo:
+
+##### Diferença entre get e request
+ - no request deve ser passado o `method(GET, POST,..)` e no get isto é setado automaticamente
+
+##### get
+###### http.get
+```js
+http.get({
+  hostname: 'localhost',
+  port: 80,
+  path: '/',
+  agent: false  // criar um novo agente apenas para este pedido
+}, function (res) {
+  // Faça algo com res
+})
+```
+###### http-get-localhost-querystring.js
+http.get
+- Parâmetros = (JSON_de_configuração, função_anonima_executada_apos_response)
+- seta o valor do verbo para **GET**
+- chama o **req.end()** automaticamente
+```js
+'use strict';
+
+const http = require('http');
+
+http.get({
+  hostname: 'localhost',
+  path: '/user?name=Suissa&teacher=true&age=31',
+  port: 3000,
+  agent: false
+}, (response) => { //function (response) {
+   let body = '';
+    console.log('STATUS: ' + response.statusCode);
+    console.log('HEADERS: ' + JSON.stringify(response.headers));
+    response.on('data', function(data) {
+      body += data;
+    });
+
+    response.on('end', function() {
+      console.log('Resposta: ', body);
+    });
+});
+```
+###### http.IncomingMessage
+- response é uma instância de http.IncomingMessage
+- https://nodejs.org/api/http.html#http_class_http_incomingmessage
+- é criado por **http.Server** ou **http.ClientRequest**
+- passado como o primeiro argumento para o **request** e **response**
+- pode ser usado para acessar a reposta de staus, os cabeçalhos e os dados em si
+- implementa a interface de `Readble Stream`, que fornce eventos como:
+ - **close**: evento que ocorre quando uma stream é fechada
+ - **data**: evento que recebe os dados do `Stream`
+ - **end**: evento que ocorre quando não há mais dados para serem lidos
+ - **error**: evento emitido quando acontece algum erro
+
+##### request
+###### JSON de configuração
+```js
+const options = {
+  host: 'api.redtube.com'
+, path: '/?data=redtube.Videos.searchVideos&search=Sasha%20Gray'
+};
+```
+###### callback
+```js
+function callback(res) {
+  console.log('STATUS: ' + res.statusCode);
+  console.log('HEADERS: ' + JSON.stringify(res.headers));
+
+  let data = '';
+
+  res.setEncoding('utf8');
+  res.on('data', (chunk) =>  {
+    data += chunk;
+  });
+  res.on('end', () => {
+    console.log('Dados finalizados: ', data)
+  })
+}
+```
+##### JSON
+ - JSON.stringify => objeto -> string
+ - JSON.parse => string -> objeto
+
+###### Passando JSON e callback para o request
+```js
+const req = http.request(options, callback);
+```
+###### error + end
+```js
+req.on('error', (e) =>  {
+  console.log('ERROOOO: ' + e.message);
+});
+req.end();
+```
+
+###### http-request.js
+```js
+'use strict';
+
+const http = require('http');
+
+const options = {
+  host: 'api.redtube.com'
+, path: '/?data=redtube.Videos.searchVideos&search=Sasha%20Gray'
+};
+
+function callback(res) {
+  console.log('STATUS: ' + res.statusCode);
+  console.log('HEADERS: ' + JSON.stringify(res.headers));
+
+  let data = '';
+
+  res.setEncoding('utf8');
+  res.on('data', (chunk) =>  {
+    data += chunk;
+  });
+  res.on('end', () => {
+    console.log('Dados finalizados: ', data)
+  })
+}
+
+const req = http.request(options, callback);
+req.on('error', (e) =>  {
+  console.log('ERROOOO: ' + e.message);
+});
+req.end();
+```
+###### CORS Server
+- http://cors-server.getup.io/
+
+
+##### Create - POST
+- http://webschool-io.herokuapp.com/
+- [http-request-post.js](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/module-nodejs/src/http/http-request-post.js)
+- `queryString` irá *parsear* os dados no formato `QueryString`
+- `QueryString` = padrão que o HTTP utiliza para transporte de informações
+ - cliente -> servidor
+ - cliente -> cliente
+- `queryString` padrão:
+ - **nome_da_variavel=conteudo da variavel**, separados por **&**
+ - querystring.stringify() =>  **name=Jean%20Nascimento&type=professor**
+
+###### JSON de configuração
+ ```js
+ const options = {
+         host: 'webschool-io.herokuapp.com'
+       , path: '/api/pokemons'
+       , headers: {
+           'Content-Type': 'application/x-www-form-urlencoded'
+         , 'Content-Length': postData.length
+         }
+       };
+ ```
+###### 'Content-Type': 'application/x-www-form-urlencoded'
+Diz a forma que a informação é enviada, nesse caso como `querystring`
+
+###### 'Content-Length': postData.length
+Diz qual é o tamanho(bytes) da informação enviada
 
 
 ### Links importantes:

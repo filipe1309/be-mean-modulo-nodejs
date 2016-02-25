@@ -10,7 +10,8 @@ http.createServer(function(request, response){
   response.write('<h1>Be - MEAN</h1>');
   response.write('<h2>Query string</h2>');
   response.write('<ul>');
-
+  console.log('recebeu req');
+  //console.log(result);
   console.log(result.query);
   for(var key in result.query){
     response.write('<li>'+key+' : '+result.query[key]+'</li>');

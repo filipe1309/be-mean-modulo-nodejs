@@ -329,7 +329,7 @@ http.createServer(function(request, response){
  - [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gdb157531c_0_214)
  - [Vídeo](https://www.youtube.com/watch?v=TpNofR3Axsk)
  - [Descrição do exercício](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/classes/nodejs/exercises/class-03.md)
- - [Resolução do exercício]()
+ - [Resolução do exercício](https://github.com/filipe1309/be-mean-modulo-nodejs/blob/master/exercises/class-03-resolved-filipe1309-filipe-leuch-bonfim.md)
 
 #### Resumo:
 
@@ -493,6 +493,54 @@ Diz a forma que a informação é enviada, nesse caso como `querystring`
 ###### 'Content-Length': postData.length
 Diz qual é o tamanho(bytes) da informação enviada
 
+
+
+### Aula 04
+#### [Callbacks](https://github.com/Webschool-io/be-mean-instagram/tree/master/Apostila/module-nodejs/src/callbacks), [FileSystem](https://github.com/Webschool-io/be-mean-instagram/tree/master/Apostila/module-nodejs/src/filesystem)
+
+ - [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gdb1ce2528_0_4)
+ - [Vídeo](https://www.youtube.com/watch?v=f9SE7Y0qYEg)
+ - [Descrição do exercício](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/classes/nodejs/exercises/class-04.md)
+ - [Resolução do exercício](https://github.com/filipe1309/be-mean-modulo-nodejs/blob/master/exercises/class-04-resolved-filipe1309-filipe-leuch-bonfim.md)
+
+#### Resumo:
+
+##### Callbacks
+Para estendermos a execução de uma função, basta passar uma outra função como parâmetro. também conhecida como `callback`.
+- funções em JS são tratadas como objetos
+- `continuation passing style`
+- setTimeout -> assync
+- setInterval -> assync
+- callback aninhado força a ordem da execução de funções
+- CUIDADO com o `Callback HELL!!!!!` = muitos callbacks aninhados
+```js
+// assinatura de uma callback
+function callback(err, result) {};
+
+sayName('teste', callback);
+```
+- array `arguments` para acessar os parâmetros de uma função.
+
+
+##### FileSystem
+- Módulo nativo
+- mpódulo para manipular o sistema de arquivos
+- writeFile
+```js
+// Sincrona
+var write = fs.writeFileSync(path_do_arquivo, conteudo);
+
+// Assincrona
+fs.writeFile(path_do_arquivo, conteudo, callback);
+```
+- mkdir
+- open
+- readdir
+- readFile
+- rename
+- Stream de arquivos
+
+40:00
 
 ### Links importantes:
 - NodeJS

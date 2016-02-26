@@ -1,5 +1,5 @@
 # Node.js - Aula 02 - Exercício
-**user:** [filipe109](https://github.com/filipe1309)  
+**user:** [filipe1309](https://github.com/filipe1309)  
 **autor:** Filipe Leuch Bonfim
 
 ## Quais são os 4 verbos que utilizamos para o CRUD?

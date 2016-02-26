@@ -78,3 +78,48 @@ Dados finalizados:
 ```
 
 ## Escolha uma **API externa** e crie um script para fazer um GET nela **mostrando o resultado com HTML**.
+```js
+'use strict';
+
+const https = require('https');
+
+const options = {
+    host: 'hacker-news.firebaseio.com'
+  , path: '/v0/item/11177200.json'
+};
+
+function callback(res) {
+  console.log('STATUS: ' + res.statusCode);
+  console.log('HEADERS: ' + JSON.stringify(res.headers));
+
+  let data = '';
+
+  res.setEncoding('utf8');
+  res.on('data', function (chunk) {
+    data += chunk;
+  });
+  res.on('end', function() {
+    let data_json =  JSON.parse(data);
+    let data_html = '<html><body><a href="';
+    data_html += data_json.url + '"><h1>';
+    data_html += data_json.title + '</h1></a></body></html>';
+
+    console.log('Dados finalizados: ', data);
+    console.log('Dados HTML: ',data_html);
+  })
+}
+
+const req = https.request(options, callback);
+
+req.on('error', function(e) {
+  console.log('ERROOOO: ' + e.message);
+});
+req.end();
+```
+#### Saída
+```
+STATUS: 200
+HEADERS: {"content-length":"559","content-type":"application/json; charset=utf-8","cache-control":"no-cache","strict-transport-security":"max-age=31556926; includeSubDomains; preload","connection":"close"}
+Dados finalizados:  {"by":"sbuk","descendants":143,"id":11177200,"kids":[11177782,11179326,11179315,11179298,11178441,11178062,11178125,11178816,11178621,11178617,11179227,11179351,11178575,11178592,11178842,11178320,11177835,11177993,11179134,11178197,11177614,11177594,11177730,11178786,11177924,11178156,11178104,11178544,11177437,11179222],"score":527,"time":1456429470,"title":"Microsoft, Google, Facebook Back Apple in Blocked Phone Case","type":"story","url":"http://www.bloomberg.com/news/articles/2016-02-25/microsoft-says-it-will-file-an-amicus-brief-to-support-apple"}
+Dados HTML:  <html><body><a href="http://www.bloomberg.com/news/articles/2016-02-25/microsoft-says-it-will-file-an-amicus-brief-to-support-apple"><h1>Microsoft, Google, Facebook Back Apple in Blocked Phone Case</h1></a></body></html>
+```

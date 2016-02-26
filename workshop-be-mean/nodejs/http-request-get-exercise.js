@@ -1,26 +1,13 @@
 'use strict';
 
-const http = require('http');
-const querystring = require('querystring');
-
-const postData = querystring.stringify({
-        q: 'curitiba parana brasil'
-      , format: 'json'
-      , limit: '1'
-      });
-
-console.log("postData", postData);
-console.log("Tamanho do postData", postData.length);
+const https = require('https');
 
 const options = {
-  host: 'nominatim.openstreetmap.org'
-, headers: {
-     'Content-Type': 'application/x-www-form-urlencoded'
-   , 'Content-Length': postData.length
-   }
+    host: 'hacker-news.firebaseio.com'
+  , path: '/v0/item/11177200.json'
 };
 
-const req = http.request(options, function(res) {
+function callback(res) {
   console.log('STATUS: ' + res.statusCode);
   console.log('HEADERS: ' + JSON.stringify(res.headers));
 
@@ -31,12 +18,19 @@ const req = http.request(options, function(res) {
     data += chunk;
   });
   res.on('end', function() {
-    console.log('Dados finalizados: ', data)
+    let data_json =  JSON.parse(data);
+    let data_html = '<html><body><a href="';
+    data_html += data_json.url + '"><h1>';
+    data_html += data_json.title + '</h1></a></body></html>';
+
+    console.log('Dados finalizados: ', data);
+    console.log('Dados HTML: ',data_html);
   })
-});
+}
+
+const req = https.request(options, callback);
 
 req.on('error', function(e) {
   console.log('ERROOOO: ' + e.message);
 });
-req.write(postData);
 req.end();

@@ -527,20 +527,64 @@ sayName('teste', callback);
 - mpódulo para manipular o sistema de arquivos
 - writeFile
 ```js
-// Sincrona
+// Síncrona
 var write = fs.writeFileSync(path_do_arquivo, conteudo);
 
-// Assincrona
+// Assíncrona
 fs.writeFile(path_do_arquivo, conteudo, callback);
 ```
-- mkdir
-- open
-- readdir
-- readFile
-- rename
 - Stream de arquivos
+```js
+// Ex writeStream
+var options = {defaultEnconding: 'utf8'};
+var writeStream = fs.createWriteStream(path_do_arquivo, options);
+writeStream.write(conteudo);
+```
+- mkdir
+```js
+// Assíncrona
+fs.mkdir(path_do_diretorio, callback);
 
-40:00
+// Síncrona
+fs.mkdirSync(path_do_diretorio, callback);
+
+```
+- open
+```js
+// Assíncrona
+// retorna o descritor do arquivo
+fs.open(path_do_arquivo, modo, callback)
+```
+- readdir
+```js
+// Assíncrona
+// retorna os arquivos em um array
+fs.readdir(path_do_diretorio, callback)
+```
+- readFile
+```js
+// Assíncrona
+fs.readFile(path_do_arquivo, callback)
+
+// Síncrona
+var fileSync = fs.readFileSync(path_do_arquivo, modo)
+```
+- rename
+```js
+// Assíncrona
+fs.rename(path, novo_path, callback)
+```
+
+
+### Aula 05 - Parte 1
+#### [npm](https://github.com/Webschool-io/be-mean-instagram/tree/master/Apostila/module-nodejs/src/npm), [Globals](https://github.com/Webschool-io/be-mean-instagram/tree/master/Apostila/module-nodejs/src/globals), [Process]()
+
+ - [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gebeab41d1_0_370)
+ - [Vídeo](https://www.youtube.com/watch?v=Kg4RovUQWeg)
+ - [Descrição do exercício](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/classes/nodejs/exercises/class-05.md)
+ - [Resolução do exercício](https://github.com/filipe1309/be-mean-modulo-nodejs/blob/master/exercises/class-05-resolved-filipe1309-filipe-leuch-bonfim.md)
+
+#### Resumo:
 
 ### Links importantes:
 - NodeJS

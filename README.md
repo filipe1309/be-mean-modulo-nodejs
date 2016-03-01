@@ -585,6 +585,163 @@ fs.rename(path, novo_path, callback)
  - [Resolução do exercício](https://github.com/filipe1309/be-mean-modulo-nodejs/blob/master/exercises/class-05-resolved-filipe1309-filipe-leuch-bonfim.md)
 
 #### Resumo:
+##### NPM
+- Gerenciador de pacotes do Node.js
+- para o gerenciamento utiliza um arquivo obrigatório JSON chamado **package.json**
+- **package.json** contem:
+ - \*nome
+  - < 214 caracteres,
+  - não começar com `.` ou `_`
+  - novos *packages* não podem ter letras maiúsculas no nome
+  - não pode contem quaisquer caracteres *non-URL-safe*
+  - Dicas:
+   - não usar o mesmo nome de um módulo do core
+   - não colocar "js" ou "node"
+   - curto e descritivo
+   - verificar se já existe (npmjs)[https://www.npmjs.com/]
+ - \*versão
+ - descrição
+ - autor
+ - licença
+ - dependências
+ - outros
+ * obrigatórios, formam um identificador único (nome + versão), e a cada novo `release` recomenda-se atualizar a versão.
+
+- nunca enviar node_modules (add no **.gitignore**)!!! ao invés utilizar as depedências listas no **package.json**, através do comando **npm install**
+- além do npm, exitem outros dois gerenciadores de versões para o node
+ - n
+ - nvm
+
+###### Comandos npm
+####### npm init
+utilizado qunado um projeto é iniciado
+```
+mkdir pokemons-api
+cd pokemons-api
+npm init
+```
+####### npm install
+Instala algum módulo/pacote e suas dependências
+```
+npm install --global ou -g
+```
+######## Instalar globalmente -g
+
+```
+npm install -g gulp
+```
+Além disto intalar globalmente:
+- nodemon;
+- mocha;
+- express-generator;
+- e outros.
+
+######## Instalar localmente
+```
+npm install nome_modulo
+```
+Deste modo, o módulo não é adicionado na lista de dependência do **package.json**, a não ser que se use a opção **--save**
+```
+npm install --save ou -S
+
+npm i --save mongoose
+```
+no **package.json** aparecerá:
+```js
+"dependencies": {
+   "mongoose": "^4.3.3"
+ }
+ ```
+Para instalar uma versão específica
+```
+npm i --save modulo@versão
+```
+######## Formas de esppecificar a versão do módulo
+- ~versão "Equivalente a versão"
+- ^versão "Compatível com a versão"
+- versão Precisa ser a versão exata
+- >versão Precisa ser maior que a versão
+- >=versão Precisa ser maior ou igual que a versão
+- < versão Precisa ser menor que a versão
+- <=versão Precisa ser menor ou igual que a versão
+- 1.2.x 1.2.0, 1.2.1, etc., mas não 1.3.0
+
+Exemplo faixa de versões:
+```
+npm i mongoose@">=4.1.0 <4.3.0"
+```
+
+######## instalar as depêndencias
+```
+npm install --production
+```
+
+######## devDependencies
+Dependências apenas para o módo de desenvolvimento
+Instalar módulo na **devDependencies**:
+```
+npm install --save-dev ou -D
+```
+Instalar apenas as **devDependencies**:
+```
+npm install --dev
+```
+
+######## optionalDependencies
+São dependências opcionais que não devem interferir na execução do projeto.
+```
+npm install --optional ou -O
+```
+
+####### npm run
+```js
+//script.js
+console.log("Rodei!");
+```
+```js
+"scripts": {
+    "roda": "node script.js"
+  },
+```
+```
+npm run roda
+```
+######## Scripts nativos
+- preversion: Roda ANTES do comando version;
+- version: Execute para modificar sua versão;
+- postversion: Roda DEPOIS de rodar o version;
+- pretest: Roda ANTES do test;
+- test: Roda o comando que executa os testes;
+- posttest: Roda DEPOIS de executar os testes;
+- prestop: Roda ANTES do comando stop;
+- stop: Roda o script caso definido;
+- poststop: Roda DEPOIS do comando stop;
+- prestart: Roda ANTES do comando start;
+- start: Executa o comando definido, normalmente utilizado para levantar o servidor;
+- poststart: Roda DEPOIS do comando start;
+- prerestart: Roda ANTES do comando restart;
+- restart: Reinicia o script;
+  - prerestart
+  - prestop
+  - stop
+  - poststop
+  - restart
+  - prestart
+  - start
+  - poststart
+  - postrestart
+- postrestart: Roda DEPOIS do comando restart.
+
+####### Globals
+- Não tem compartilhamento global de escopo
+- + secure development
+- Disponíveis em todos os módulos
+- Not require();
+
+####### Process
+- Instancia de EventEmitter
+
+
 
 ### Links importantes:
 - NodeJS

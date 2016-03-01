@@ -1,0 +1,11 @@
+{
+  "name": "roda-script",
+  "version": "1.0.0",
+  "description": "Eh nozez",
+  "main": "index.js",
+  "scripts": {
+    "roda": "node script.js"
+  },
+  "author": "Filipe",
+  "license": "WTFPL"
+}

@@ -620,6 +620,7 @@ mkdir pokemons-api
 cd pokemons-api
 npm init
 ```
+
 Exemplo de um **package.json**:
 ```js
 {
@@ -643,13 +644,14 @@ Exemplo de um **package.json**:
 ```
 ####### npm install
 Instala algum módulo/pacote e suas dependências
+######## Instalar globalmente -g ou --global
 ```
 npm install --global ou -g
 ```
-######## Instalar globalmente -g
 
+Instalando o gulp globalmente
 ```
-npm install -g gulp
+sudo npm install -g gulp
 ```
 Além disto intalar globalmente:
 - nodemon;
@@ -661,22 +663,28 @@ Além disto intalar globalmente:
 ```
 npm install nome_modulo
 ```
-Deste modo, o módulo não é adicionado na lista de dependência do **package.json**, a não ser que se use a opção **--save**
+Deste modo, o módulo não é adicionado na lista de dependência do **package.json**, a não ser que se use a opção **--save** ou **-S**:
 ```
 npm install --save ou -S
+```
 
+Exemplo
+```
 npm i --save mongoose
 ```
+
 no **package.json** aparecerá:
 ```js
 "dependencies": {
    "mongoose": "^4.3.3"
  }
  ```
+
 Para instalar uma versão específica
 ```
 npm i --save modulo@versão
 ```
+
 ######## Formas de especificar a versão do módulo
 - ~versão "Equivalente a versão"
 - ^versão "Compatível com a versão"
@@ -687,7 +695,7 @@ npm i --save modulo@versão
 - <=versão Precisa ser menor ou igual que a versão
 - 1.2.x 1.2.0, 1.2.1, etc., mas não 1.3.0
 
-Exemplo faixa de versões:
+Exemplo de faixa de versões:
 ```
 npm i mongoose@">=4.1.0 <4.3.0"
 ```
@@ -707,18 +715,38 @@ Instalar apenas as **devDependencies**:
 ```
 npm install --dev
 ```
-
+Exemplo
+```
+npm install --save-dev jasmine
+```
+```js
+"devDependencies": {
+  "jasmine": "~2.4.1"
+}
+```
 ######## optionalDependencies
 São dependências opcionais que não devem interferir na execução do projeto.
 ```
 npm install --optional ou -O
 ```
+Exemplo
+```
+npm i colors --save-optional
+```
+```js
+"optionalDependencies": {
+  "colors": "~1.1.2"
+}
+```
 
 ####### npm run
+- Executa scripts
+- Pode ser utilizado para automatizar tarefas
 ```js
 //script.js
 console.log("Rodei!");
 ```
+Adicionar no **package.json**
 ```js
 "scripts": {
     "roda": "node script.js"
@@ -752,6 +780,12 @@ npm run roda
   - poststart
   - postrestart
 - postrestart: Roda DEPOIS do comando restart.
+
+Exemplo
+```
+npm start
+```
+
 
 ####### Globals
 - Não tem compartilhamento global de escopo

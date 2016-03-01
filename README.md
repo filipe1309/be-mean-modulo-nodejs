@@ -588,7 +588,7 @@ fs.rename(path, novo_path, callback)
 ##### NPM
 - Gerenciador de pacotes do Node.js
 - para o gerenciamento utiliza um arquivo obrigatório JSON chamado **package.json**
-- **package.json** contem:
+- **package.json** contém:
  - \*nome
   - < 214 caracteres,
   - não começar com `.` ou `_`
@@ -607,18 +607,39 @@ fs.rename(path, novo_path, callback)
  - outros
  * obrigatórios, formam um identificador único (nome + versão), e a cada novo `release` recomenda-se atualizar a versão.
 
-- nunca enviar node_modules (add no **.gitignore**)!!! ao invés utilizar as depedências listas no **package.json**, através do comando **npm install**
-- além do npm, exitem outros dois gerenciadores de versões para o node
+- nunca enviar o `node_modules`!!! ao invés utilizar as depedências listas no **package.json**, através do comando **npm install**, e adicionar o `node_modules` no **.gitignore**
+- além do npm, exitem outros dois gerenciadores de versões para o Node.js
  - n
  - nvm
 
 ###### Comandos npm
 ####### npm init
-utilizado qunado um projeto é iniciado
+utilizado quando um projeto é iniciado, responsável por criar o **package.json**
 ```
 mkdir pokemons-api
 cd pokemons-api
 npm init
+```
+Exemplo de um **package.json**:
+```js
+{
+  "name": "pokemons-api",
+  "version": "0.0.1",
+  "description": "API para nossos Pokemons",
+  "main": "index.js",
+  "scripts": {
+￼
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "pokemons",
+    "node",
+    "mongodb",
+    "webschool"
+  ],
+  "author": "Filipe",
+  "license": "WTFPL"
+}
 ```
 ####### npm install
 Instala algum módulo/pacote e suas dependências
@@ -656,7 +677,7 @@ Para instalar uma versão específica
 ```
 npm i --save modulo@versão
 ```
-######## Formas de esppecificar a versão do módulo
+######## Formas de especificar a versão do módulo
 - ~versão "Equivalente a versão"
 - ^versão "Compatível com a versão"
 - versão Precisa ser a versão exata

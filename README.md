@@ -719,6 +719,7 @@ Exemplo
 ```
 npm install --save-dev jasmine
 ```
+no **package.json** aparecerá:
 ```js
 "devDependencies": {
   "jasmine": "~2.4.1"
@@ -733,6 +734,7 @@ Exemplo
 ```
 npm i colors --save-optional
 ```
+no **package.json** aparecerá:
 ```js
 "optionalDependencies": {
   "colors": "~1.1.2"
@@ -786,17 +788,65 @@ Exemplo
 npm start
 ```
 
+### Aula 05 - Parte 2
+#### [Globals](https://github.com/Webschool-io/be-mean-instagram/tree/master/Apostila/module-nodejs/src/globals), Process
+
+ - [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gebeab41d1_0_172)
+ - [Vídeo](https://www.youtube.com/watch?v=DD1XKyaq9NE)
+ - [Descrição do exercício](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/classes/nodejs/exercises/class-05.md)
+ - [Resolução do exercício](https://github.com/filipe1309/be-mean-modulo-nodejs/blob/master/exercises/class-05-resolved-filipe1309-filipe-leuch-bonfim.md)
 
 ####### Globals
 - Não tem compartilhamento global de escopo
 - + secure development
 - Disponíveis em todos os módulos
-- Not require();
+- Não precisa de `require()`;
+
+Exemplos
+```js
+'use strict';
+
+console.log(__dirname);
+console.log(__filename);
+
+var buff = new Buffer('Hello, world!');
+console.log(buff.toString()); // Hello, world!
+
+const time = setInterval(() => console.log("hello async"), 1000); // syntax de arrow function
+setTimeout(() => {
+	clearInterval(time); // 4 X hello async
+}, 5000);
+// clearTimeout
+```
 
 ####### Process
-- Instancia de EventEmitter
+- Módulo global
+- Instancia de `EventEmitter`: emite eventos
+Exemplos
+```js
+'use strict';
+
+const http = require('http');
+process.nextTick(() => { // Espera o proximo loop do Event IO
+	console.log('Eu sou um async');
+});
+
+console.log(process.execPath); // path do node
+console.log(process.cwd()); // dir atual
+console.log(process.pid); // pid do node
+
+let server = http.createServer((req, res)=>{
+});
 
 
+server.listen(3000, () => {
+	console.log('I am on');
+});
+process.on('SIGINT', () => {
+	console.log('\teu sai caraa!');
+	process.exit(0);
+});
+```
 
 ### Links importantes:
 - NodeJS

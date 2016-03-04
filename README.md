@@ -150,7 +150,6 @@ undefined
   - nativo
   - require("http")
   - requisição -> cabeçalho
-
   - Métodos
     - GET - busca/requisita uma representação do recurso especificado
     - HEAD - retorna os cabeçalhos de uma resposta
@@ -577,7 +576,7 @@ fs.rename(path, novo_path, callback)
 
 
 ### Aula 05 - Parte 1
-#### [npm](https://github.com/Webschool-io/be-mean-instagram/tree/master/Apostila/module-nodejs/src/npm), [Globals](https://github.com/Webschool-io/be-mean-instagram/tree/master/Apostila/module-nodejs/src/globals), [Process]()
+#### [npm](https://github.com/Webschool-io/be-mean-instagram/tree/master/Apostila/module-nodejs/src/npm)
 
  - [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gebeab41d1_0_370)
  - [Vídeo](https://www.youtube.com/watch?v=Kg4RovUQWeg)

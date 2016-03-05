@@ -287,8 +287,14 @@ Criar um servidor web de arquivos estáticos: .css, .html, .js e etc... UTILIZAN
         case 'jpeg':
         case 'jpg':
           cType = 'image/jpeg';
+          dir = 'img';
+          break;
         case 'png':
           cType = 'image/png';
+          dir = 'img';
+          break;
+        case 'gif':
+          cType = 'image/gif';
           dir = 'img';
           break;
         default:
@@ -346,3 +352,14 @@ Criar um servidor web de arquivos estáticos: .css, .html, .js e etc... UTILIZAN
       console.log('Servidor rodando em localhost:3000');
     });
 ```
+#### index
+!['index'](https://github.com/filipe1309/be-mean-modulo-nodejs/blob/master/src/class05/desafio/img/index_printscreen.png)
+
+#### main.css
+!['main.css'](https://github.com/filipe1309/be-mean-modulo-nodejs/blob/master/src/class05/desafio/img/file_main_css_printscreen.png)
+
+#### 404
+!['Not found'](https://github.com/filipe1309/be-mean-modulo-nodejs/blob/master/src/class05/desafio/img/not_found_printscreen.png)
+
+#### diretório css
+!['dir css'](https://github.com/filipe1309/be-mean-modulo-nodejs/blob/master/src/class05/desafio/img/dir_css_printscreen.png)

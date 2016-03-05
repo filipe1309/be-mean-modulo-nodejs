@@ -39,6 +39,14 @@
           cType = 'image/jpeg';
           dir = 'img';
           break;
+        case 'png':
+          cType = 'image/png';
+          dir = 'img';
+          break;
+        case 'gif':
+          cType = 'image/gif';
+          dir = 'img';
+          break;
         default:
           responseStatusCode = 404;
           break;
@@ -50,7 +58,7 @@
       // Ajusta o path, incluido a pasta do arquivo requisitado
       var path_file_req = dir+file_req;
 
-      try{
+      try {
         /*
         Caso um diretório de arquivos (css, html, js, img) seja informado,
         caso exista, os arquivos daquele diretório serão listados
@@ -78,7 +86,7 @@
           // Escreve o conteudo do arquivo no response
           res.write(file_server);
         }
-       } catch(e){
+       } catch(e) {
          var file_error = fs.readFileSync('html/not_found.html');
          res.write(file_error);
        }

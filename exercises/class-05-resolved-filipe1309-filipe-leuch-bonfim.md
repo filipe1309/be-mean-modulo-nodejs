@@ -287,6 +287,8 @@ Criar um servidor web de arquivos estáticos: .css, .html, .js e etc... UTILIZAN
         case 'jpeg':
         case 'jpg':
           cType = 'image/jpeg';
+        case 'png':
+          cType = 'image/png';
           dir = 'img';
           break;
         default:

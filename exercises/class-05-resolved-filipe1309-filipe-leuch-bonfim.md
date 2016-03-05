@@ -352,14 +352,14 @@ Criar um servidor web de arquivos estáticos: .css, .html, .js e etc... UTILIZAN
       console.log('Servidor rodando em localhost:3000');
     });
 ```
-#### index
+#### [index] localhost:3000/
 !['index'](https://github.com/filipe1309/be-mean-modulo-nodejs/blob/master/src/class05/desafio/img/index_printscreen.png)
 
-#### main.css
+#### [Arquivo] localhost:3000/main.css
 !['main.css'](https://github.com/filipe1309/be-mean-modulo-nodejs/blob/master/src/class05/desafio/img/file_main_css_printscreen.png)
 
-#### 404
+#### [404] localhost:3000/non_ecziste
 !['Not found'](https://github.com/filipe1309/be-mean-modulo-nodejs/blob/master/src/class05/desafio/img/not_found_printscreen.png)
 
-#### diretório css
+#### [diretório] localhost:3000/css
 !['dir css'](https://github.com/filipe1309/be-mean-modulo-nodejs/blob/master/src/class05/desafio/img/dir_css_printscreen.png)

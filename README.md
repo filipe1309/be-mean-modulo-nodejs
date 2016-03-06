@@ -795,6 +795,7 @@ npm start
  - [Descrição do exercício](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/classes/nodejs/exercises/class-05.md)
  - [Resolução do exercício](https://github.com/filipe1309/be-mean-modulo-nodejs/blob/master/exercises/class-05-resolved-filipe1309-filipe-leuch-bonfim.md)
 
+#### Resumo:
 ####### Globals
 - Não tem compartilhamento global de escopo
 - + secure development
@@ -844,6 +845,347 @@ server.listen(3000, () => {
 process.on('SIGINT', () => {
 	console.log('\teu sai caraa!');
 	process.exit(0);
+});
+```
+
+### Aula 06 - Parte 1/3
+#### [Mongoose](https://github.com/Webschool-io/be-mean-instagram/tree/master/Apostila/module-nodejs/src/mongoose)
+
+ - [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gdb1ce2528_0_8)
+ - [Vídeo](https://www.youtube.com/watch?v=O8odFa3dl-k)
+
+#### Resumo:
+##### Mongoose
+- proporciona `schemas` para o MongoDb
+- ODM - Object Document Mapper (tipo um ORM)
+- `schema` no mongoose
+ - é o esqueleto da coleção
+ - é o objeto onde são definidos os campos da coleção com seus tipos, atributos e validações
+
+ Importando o ódulo do Mongoose
+```js
+const mongoose = require('mongoose');
+```
+
+conectando no MongoDb
+```js
+mongoose.connect('mongodb://localhost/be-mean-instagram');
+```
+
+criação do `schema`
+```js
+const Schema = mongoose.Schema;
+// Criação do Schema
+const pokemonSchema = new Schema({
+ name:  String,
+ description: String,
+ type:   String,
+ attack:   Number,
+ defense:   Number,
+ height:   Number
+});
+```
+###### connect
+Conexão
+```js
+var dbURI = 'mongodb://localhost/be-mean-instagram';
+
+mongoose.connect(dbURI);
+```
+
+Eventos
+```js
+mongoose.connection.on('connected', function () {
+  console.log('Mongoose default connection open to ' + dbURI);
+});
+mongoose.connection.on('error',function (err) {
+  console.log('Mongoose default connection error: ' + err);
+});
+mongoose.connection.on('disconnected', function () {
+  console.log('Mongoose default connection disconnected');
+});
+mongoose.connection.on('open', function () {
+  console.log('Mongoose default connection is open');
+});
+```
+
+Fecha a conexão com o MongDb, caso o Node.js seja finalizado
+```js
+process.on('SIGINT', function() {
+  mongoose.connection.close(function () {
+    console.log('Mongoose default connection disconnected through app termination');
+    process.exit(0);
+  });
+});
+```
+
+###### default
+adicionando o campo created_at, com a data atual como default
+```js
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/be-mean-instagram');
+const Schema = mongoose.Schema;
+const _schema = {
+  name:  String,
+  description: String,
+  type:   String,
+  attack:   Number,
+  defense:   Number,
+  height:   Number,
+  created_at: { type: Date, default: Date.now }
+}
+
+const pokemonSchema = new Schema(_schema);
+
+const data = {name: 'Suissamon'};
+
+var Model = mongoose.model('pokemons', pokemonSchema);
+var poke = new Model(data);
+poke.save(function (err, data) {
+  if (err) return console.log('ERRO: ', err);
+  console.log('Inseriu: ', data)
+})
+```
+
+Saída
+```
+Inseriu:  { created_at: Sat Mar 05 2016 22:37:49 GMT-0300 (BRT),
+  _id: 56db89ed4e0194cc50f23242,
+  name: 'Suissamon',
+  __v: 0 }
+```
+
+###### Sintaxe do campo do `Schema`
+campo: tipo == campo: {type: tipo}
+Exemplo name: String == name: {type: String}
+
+###### Tipos
+- String
+ - Number é convertido para String
+- Number
+ - positivos, negativos, inteiros, decimais e frações
+- Date
+ - Date.now é executado quando o objeto/model for criado, já no Date.now() todos os objetos teriam o mesmo valor
+- Buffer
+ - utilizado para salvar arquivos e retorná-los na forma de `buffer` (`binary` no MongoDb)
+ - utilizado para dados binários (imagens, vídeos, ...)
+- Boolean
+- Mixed
+ - Virtualmente aceita qualquer tipo
+ - Schema.Types.Mixed
+- ObjectId
+ - campo importante para fazer ligações(relacionamentos) entre coleções
+ - Schema.Types.ObjectId
+- Array
+ - Schema.Types.Array cria um array para cada elemento contido no campo.
+ - a forma mais utilizada é [tipo]. Ex: [String]
+
+###### Populate
+será o responsável por fazer a busca pelos **_ids** especificados no campo com **Schema.Types.ObjectId**, utilizando o atributo `ref` para selecionar a coleção.
+
+
+###### `__v`
+- adicionado automaticamente quando um documento novo é inserido
+- tem a função de gerenciar, internamente, a versão de cada documento caso haja alguma alteração concorrente
+
+### Aula 06 - Parte 2/3
+#### [Mongoose](https://github.com/Webschool-io/be-mean-instagram/tree/master/Apostila/module-nodejs/src/mongoose)
+
+ - [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gfd3afa4fe_0_412)
+ - [Vídeo](https://www.youtube.com/watch?v=02a_lo_KLwU)
+
+##### Resumo
+###### Validação
+- Validação é definida no tipo do campo, no `Schema`;
+- Validação é uma peça interna do *Middleware*;
+- Validação ocorre quando um documento tenta ser salvo, após ter sido definido com seu padrão;
+- Validadores não são executados em valores indefinidos (undefined, null). A única exceção é a validação required;
+- Validação é assincronamente recursiva, quando você chamar a função `save` do *Model*, a validação dos sub-documentos é executado também. Se ocorrer um erro ele será enviado para o *callback* da função `save`;
+- Validação suporta a personalização completa.
+
+####### Validação padrão
+- Existem em alguns tipos de campos.
+- Todos os tipos também possui a validação de required.
+- Validadores específicos:
+ - Number: possui os validadores de max e min
+ - String: possui os validadores de enum, match, maxlength e minlength
+
+**No objeto de erro do Mongoose:**
+message: "nome do Model" "validation failed"
+name: nome da validação que deu errado
+```js
+{ [ValidationError: testepokemon validation failed]
+  message: 'testepokemon validation failed',
+  name: 'ValidationError'
+  ...
+}
+```
+
+errors
+```js
+{ message: 'Cast to String failed for value "[object Object]" at path "name"',
+  name: 'CastError',
+  kind: 'String',
+  value: [Object],
+  path: 'name',
+  reason: undefined
+}
+```
+- message: texto da mensagem de erro;
+- name: nome do erro;
+- kind: tipo do campo;
+- value: valor que provocou o erro;
+- path: nome do campo;
+- reason: razão porque o erro ocorreu, raramente usado.
+
+####### Validação customizada
+Aula 8 ... =P
+
+###### Model
+- implementação do `Schema`
+- possui a propriedade de pluralização automática e manual
+ - ex: model('Model', schema) irá buscar automaticamente pela collection models
+ - model('Carro', schema,'carros' ) irá buscar automaticamente pela collection carros
+```js
+var Model = mongoose.model('Model', schema);
+```
+
+Exemplo
+```js
+const _schema = {
+  name:  String
+}
+const pokemonSchema = new Schema(_schema);
+const PokemonModel = mongoose.model('Pokemon', pokemonSchema);
+const Suissamon = new PokemonModel({ name: 'Suissamon' });
+Suissamon.save(function (err, data) {
+  if (err) return console.log('ERRO: ', err);
+  return console.log('Inseriu:', data);
+})
+// ou
+PokemonModel.create({ name: 'Suissamon' }, function (err, data) {
+  if (err) return console.log('ERRO: ', err);
+  return console.log('Inseriu:', data);
+})
+```
+
+###### Create
+- utilizaremos como padrão o save!!!
+```js
+const _schema = {
+  name:  String
+}
+const pokemonSchema = new Schema(_schema);
+const PokemonModel = mongoose.model('Pokemon', pokemonSchema);
+const dataModel = { name: 'Suissamon' };
+const Suissamon = new PokemonModel(dataModel);
+
+Suissamon.save(function (err, data) {
+  if (err) return console.log('ERRO: ', err);
+  return console.log('Inseriu:', data);
+})
+```
+
+###### Retrieve
+find
+- 2 formas de buscar no Mongoose
+ - via callback com JSON
+ - encadeando funções
+
+Exemplo
+```js
+const pokemonSchema = new Schema(_schema);
+const PokemonModel = mongoose.model('Pokemon', pokemonSchema);
+const query = {name: 'Pikachu', attack: {$gt: 90}};
+
+PokemonModel.find(query, function (err, data) {
+  if (err) return console.log('ERRO: ', err);
+  return console.log('Buscou:', data);
+});
+```
+ou
+```js
+const pokemonSchema = new Schema(_schema);
+const PokemonModel = mongoose.model('Pokemon', pokemonSchema);
+
+const query = {name: 'Pikachu'};
+const callback = function (err, data) {
+  if (err) return console.log('ERRO: ', err);
+  return console.log('Buscou:', data);
+}
+
+PokemonModel.find(query).where({attack: {$gt: 90}}).exec(callback)
+```
+
+findOne
+```js
+PokemonModel.findOne(query, function (err, data) {});
+
+PokemonModel.findOne(query).exec(callback);
+```
+
+findById
+- equivalente ao findOne({_id: id})
+```js
+PokemonModel.findById(id, function (err, data) {});
+
+PokemonModel.findById(id).exec(callback);
+```
+
+###### Update
+- podemos omitir o operador $set pois ele não irá sobrescrever todo seu objeto caso não o use, assim como é no cliente do MongoDb
+
+Exemplo
+```js
+const _schema = {
+      name:  String,
+      description: String,
+      type:   String,
+      attack:   Number,
+      defense:   Number,
+      height:   Number
+    };
+const PokemonSchema = new Schema(_schema);
+const Pokemon = mongoose.model('Pokemon', PokemonSchema);
+const query = {name: /pikachu/i};
+const mod = {attack: 666};
+
+Pokemon.update(query, mod, function (err, data) {
+  if (err) return console.log('ERRO: ', err);
+  return console.log('Alterou:', data);
+});
+```
+
+
+### Aula 06 - Parte 3/3
+#### [Mongoose](https://github.com/Webschool-io/be-mean-instagram/tree/master/Apostila/module-nodejs/src/mongoose)
+
+ - [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gfd3afa4fe_0_412)
+ - [Vídeo](https://www.youtube.com/watch?v=02a_lo_KLwU)
+ - [Descrição do exercício](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/classes/nodejs/exercises/class-06.md)
+ - [Resolução do exercício](https://github.com/filipe1309/be-mean-modulo-nodejs/blob/master/exercises/class-06-resolved-filipe1309-filipe-leuch-bonfim.md)
+
+##### Resumo
+###### Delete
+- default -> multi: true
+Exemplo
+```js
+const Schema = mongoose.Schema;
+const _schema = {
+      name:  String,
+      description: String,
+      type:   String,
+      attack:   Number,
+      defense:   Number,
+      height:   Number
+    };
+const PokemonSchema = new Schema(_schema);
+const Pokemon = mongoose.model('Pokemon', PokemonSchema);
+const query = {_id: '569b27ebfdafdac00914d495'};
+
+Pokemon.remove(query, function (err, data) {
+  if (err) return console.log('ERRO: ', err);
+  return console.log('Deletou:', data);
 });
 ```
 

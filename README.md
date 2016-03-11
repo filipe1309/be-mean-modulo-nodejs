@@ -862,17 +862,18 @@ process.on('SIGINT', () => {
  - é o esqueleto da coleção
  - é o objeto onde são definidos os campos da coleção com seus tipos, atributos e validações
 
- Importando o ódulo do Mongoose
+
+**Importando o módulo do Mongoose**
 ```js
 const mongoose = require('mongoose');
 ```
 
-conectando no MongoDb
+**conectando no MongoDb**
 ```js
 mongoose.connect('mongodb://localhost/be-mean-instagram');
 ```
 
-criação do `schema`
+**criação do `schema`**
 ```js
 const Schema = mongoose.Schema;
 // Criação do Schema
@@ -886,14 +887,14 @@ const pokemonSchema = new Schema({
 });
 ```
 ###### connect
-Conexão
+**Conexão**
 ```js
 var dbURI = 'mongodb://localhost/be-mean-instagram';
 
 mongoose.connect(dbURI);
 ```
 
-Eventos
+**Eventos**
 ```js
 mongoose.connection.on('connected', function () {
   console.log('Mongoose default connection open to ' + dbURI);
@@ -909,7 +910,7 @@ mongoose.connection.on('open', function () {
 });
 ```
 
-Fecha a conexão com o MongDb, caso o Node.js seja finalizado
+**Fecha a conexão com o MongDb, caso o Node.js seja finalizado**
 ```js
 process.on('SIGINT', function() {
   mongoose.connection.close(function () {
@@ -920,7 +921,7 @@ process.on('SIGINT', function() {
 ```
 
 ###### default
-adicionando o campo created_at, com a data atual como default
+**adicionando o campo created_at, com a data atual como default**
 ```js
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/be-mean-instagram');
@@ -947,7 +948,7 @@ poke.save(function (err, data) {
 })
 ```
 
-Saída
+**Saída**
 ```
 Inseriu:  { created_at: Sat Mar 05 2016 22:37:49 GMT-0300 (BRT),
   _id: 56db89ed4e0194cc50f23242,
@@ -956,7 +957,7 @@ Inseriu:  { created_at: Sat Mar 05 2016 22:37:49 GMT-0300 (BRT),
 ```
 
 ###### Sintaxe do campo do `Schema`
-campo: tipo == campo: {type: tipo}
+campo: tipo == campo: {type: tipo}  
 Exemplo name: String == name: {type: String}
 
 ###### Tipos

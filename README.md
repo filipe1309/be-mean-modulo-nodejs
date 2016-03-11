@@ -949,7 +949,7 @@ poke.save(function (err, data) {
 ```
 
 **Saída**
-```
+```js
 Inseriu:  { created_at: Sat Mar 05 2016 22:37:49 GMT-0300 (BRT),
   _id: 56db89ed4e0194cc50f23242,
   name: 'Suissamon',

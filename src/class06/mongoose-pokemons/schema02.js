@@ -14,7 +14,7 @@ const pokemonSchema = new Schema(_schema);
 
 const data = {name: 'Suissamon'};
 
-var Model = mongoose.model('pokemons', pokemonSchema);
+const Model = mongoose.model('pokemons', pokemonSchema);
 var poke = new Model(data);
 poke.save(function (err, data) {
   if (err) return console.log('ERRO: ', err);

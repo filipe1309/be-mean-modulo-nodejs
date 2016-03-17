@@ -1309,6 +1309,11 @@ function sendError(err) {
 module.exports = User;
 ```
 
+###### Events no mongoose
+- todo model do mongoose é um evento Emitter
+- Um model pode executar tarefas antes e/ou quando for executar alguma função, como: save, create, find ou ou  qualquer função interna.
+
+
 ###### Código 05
 ```js
 'use strict';
@@ -1345,10 +1350,6 @@ schema.post('find', function(result) {
 module.exports = exports = pokemonHandler();
 ```
 
-###### Events no mongoose
-- todo model do mongoose é um evento Emitter
-- Um model pode executar tarefas antes e/ou quando for executar alguma função, como: save, create, find ou ou  qualquer função interna.
-
 ##### Promises
 É uma abstração para trabalhar com código assíncrono de forma elegante, organizada e simplificada.
 
@@ -1357,10 +1358,9 @@ Uma Promise é composta por três estados básicos:
 - realizada / fulfilled: quando ela termina e tem um resultado de sucesso.
 - rejeitada / reject: quando termina e tem algum erro;
 
-
 Usar a Promise para abstrair o código assincrono e deixá-lo simples de ler, testar e manter é uma boa prática.
 
-###### Código 01
+###### Código 01 [Sem Promise]
 ```js
 'use strict';
 
@@ -1371,7 +1371,7 @@ fs.readFile('./persons.json','utf-8',function(err, file){
         });
 ```
 
-###### Código 02
+###### Código 02 [Sem Promise, com mais funções encadeadas]
 ```js
 'use strict';
 
@@ -1403,7 +1403,7 @@ function sendFiles(files){
 }
 ```
 
-###### Código 03
+###### Código 03 [Com Promise]
 ```js
 'use strict';
 
@@ -1420,7 +1420,7 @@ function readFile (path) {
 module.exports = readFile;
 ```
 
-###### Código 04
+###### Código 04 [Com Promise]
 ```js
 'use strict';
 
@@ -1446,7 +1446,7 @@ function error (err) {
 }
 ```
 
-###### Código 05
+###### Código 05 [Promise.all]
 ```js
 Promise.all([  
         readFile('./persons.json'),

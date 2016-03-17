@@ -1190,6 +1190,359 @@ Pokemon.remove(query, function (err, data) {
 });
 ```
 
+### Aula 07
+#### [Eventos](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/module-nodejs/pt-br/events.md), [Promises](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/module-nodejs/pt-br/promise.md)
+
+ - [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gf9c5c9121_0_38)
+ - [Vídeo](https://www.youtube.com/watch?v=i6h1A-l11-k)
+ - [Descrição do exercício](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/classes/nodejs/exercises/class-07.md)
+ - [Resolução do exercício](https://github.com/filipe1309/be-mean-modulo-nodejs/blob/master/exercises/class-07-resolved-filipe1309-filipe-leuch-bonfim.md)
+
+##### Resumo
+Esse módulo pode ser acessado através do módulo
+```js
+require(‘events’)
+```
+
+Eventos podem ser nominados de acordo com a necessidade de cada função, contudo eles seguem um padrão para emissão (emit) e escuta (listener) de eventos.
+
+```js
+obj.emit(“event:name”, value)
+obj.on(“event:name”, action(value){})
+```
+
+###### Código 01 [On]
+```js
+ 'use strict';
+
+ const events  = require('events');
+ const em      = new events.EventEmitter();
+
+ em.on("time:event", timeEvent);
+ em.on("mod:three", mod3Event);
+
+ function timeEvent(interval) {
+     console.log('timeEvent '+interval);
+ }
+
+ function mod3Event(mod3) {
+     console.log('3 mod %s === 0 ',mod3);
+ }
+
+ module.exports = em;
+```
+
+###### Código 02 [Emit]
+```js
+'use strict';
+
+const em  = require('./events');
+
+setInterval(( function() {
+            let i = 1;
+            return function () {
+                if(i % 3 === 0) {
+                    em.emit('mod:three',i++);
+                } else {
+                    em.emit('time:event', i++);
+                }
+            };
+})(),1000);
+```
+
+###### Código 03 [Herança]
+```js
+'use strict';
+
+const EventEmitter = require('events').EventEmitter;
+const util = require('util');
+
+function User () {
+    EventEmitter.call(this);
+}
+
+util.inherits(User, EventEmitter);
+
+module.exports = User;
+```
+
+###### Código 04 [Herança]
+```js
+“use strict”;
+
+const EventEmitter = require('events').EventEmitter;
+const util = require('util');
+
+function User (data) {
+    this.data = data;
+    this.on('user:save', sendMail);
+    this.on('error', sendError);
+    EventEmitter.call(this);
+}
+
+
+User.prototype.save = function () {  
+    if(this.data.name){
+        this.emit('user:save',this.data);
+    }
+    else {
+        this.emit('error', new TypeError('User need an name'));
+    }
+};
+
+util.inherits(User, EventEmitter);
+
+function sendMail(user) {
+    user.pass = Math.floor(Math.random() * (1000000 - 900000)) + 900000;
+    util.log(`\n
+            \tOla ${user.name}!
+            \tbem vindo seu pass é ${user.pass}
+            \tvocê tem 24 horas para muda-lo
+            \tou tera que pedir reenvio\n`
+            );
+}
+
+function sendError(err) {
+    throw err;
+}
+
+module.exports = User;
+```
+
+###### Código 05
+```js
+'use strict';
+const mongoose = require('mongoose');
+const util = require('util');
+
+function pokemonHandler () {
+    let Schema = mongoose.Schema;
+    const ObjectId = Schema.ObjectId;         
+
+    const schema = new Schema({
+            id          : ObjectId,
+            name        : {type : String, trin : true},
+            type        : {type : String, trin : true},
+            attack      : {type : Number},
+            defence     : {type : Number},
+            height      : {type : Number},
+            description : {type : String, trin : true}
+});
+
+schema.pre('find',function (next) {
+        this.start = Date.now();
+        util.log("finding ...");
+        next();
+});
+
+schema.post('find', function(result) {
+        setTimeout(function(){
+                console.log('finding end :P')
+                },1000);
+        });
+    return mongoose.model('Pokemon', schema);
+}
+module.exports = exports = pokemonHandler();
+```
+
+###### Events no mongoose
+- todo model do mongoose é um evento Emitter
+- Um model pode executar tarefas antes e/ou quando for executar alguma função, como: save, create, find ou ou  qualquer função interna.
+
+##### Promises
+É uma abstração para trabalhar com código assíncrono de forma elegante, organizada e simplificada.
+
+Uma Promise é composta por três estados básicos:
+- pendente: quando ainda está executando.
+- realizada / fulfilled: quando ela termina e tem um resultado de sucesso.
+- rejeitada / reject: quando termina e tem algum erro;
+
+
+Usar a Promise para abstrair o código assincrono e deixá-lo simples de ler, testar e manter é uma boa prática.
+
+###### Código 01
+```js
+'use strict';
+
+const fs = require('fs');
+
+fs.readFile('./persons.json','utf-8',function(err, file){
+        if(!err) console.log(file);
+        });
+```
+
+###### Código 02
+```js
+'use strict';
+
+const fs = require('fs');
+//lendo primeiro arquivo
+fs.readFile('./persons.json','utf-8', function(err, persons){
+        //array para juntar todos
+        let todos = [];
+        if(!err){
+        fs.readFile('./friends.json','utf-8', function(err, friends){
+                if(!err){
+                    //juntando arquivos
+                    todos.push(JSON.parse(persons));
+                    todos.push(JSON.parse(friends));
+                }
+                    //fazendo uma operação com eles
+                    sendFiles(todos);
+                });
+        }
+});
+
+function sendFiles(files){
+    //mapeando os arquivos
+    var arr = files.map(function(person) {
+                            return person.concat(person)
+                        });
+    //lendo o resultado
+    console.log(arr[0]);
+}
+```
+
+###### Código 03
+```js
+'use strict';
+
+const fs =  require('fs');
+
+function readFile (path) {
+    return new Promise(function(resolve, reject) {
+            fs.readFile(path,'utf8',function(err, res) {
+                    err ? reject(err) : resolve(res);
+                    });    
+            });
+}
+
+module.exports = readFile;
+```
+
+###### Código 04
+```js
+'use strict';
+
+const readFile = require('./fs-promise');
+
+readFile('./persons.json')
+.then(function(data) {
+        success(data);
+        })
+.catch(function(err){
+        error(err);
+        });
+
+readFile('./perso.json')
+.then(success , error);
+
+function success (data) {
+    console.log(data);
+}
+
+function error (err) {
+    console.error(err);
+}
+```
+
+###### Código 05
+```js
+Promise.all([  
+        readFile('./persons.json'),
+        readFile('./friends.json')
+])
+.then(function(result) {
+        console.log(result);
+        })
+.catch(function(err){
+        console.log(err);
+        });
+```
+
+###### Promise no Mongoose
+Nos models do mongoose assim como temos Eventemitters por padrão, podemos também trabalhar com Promise, que ajuda muito a deixar o código simples de manter e testar.
+ + http://mongoosejs.com/docs/promises.html
+
+###### Código 01
+```js
+'use strict';
+
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/yourdb');
+const Pokemon = require('./models/pokemon');
+
+
+const pokemon = {
+            name : "Pompeu Limp",
+            type : "Fire",
+            attack : 81,
+            defence : 65,
+            height : 1.82,
+            description : "jiujitero"
+};
+
+
+Pokemon.create(pokemon).then(success , error);
+
+function success(data) {
+    console.log(data);
+}
+
+function error (err) {
+    console.log(err);
+}
+```
+
+###### Código 02
+```js
+'use strict';
+
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/pompeuapi');
+const Pokemon = require('./models/pokemon');
+
+let promise = Pokemon.find({}).exec();
+promise.then(success, error);
+```
+
+###### Código 03
+```js
+'use strict';
+
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/pompeuapi');
+const Pokemon = require('./models/pokemon');
+
+
+let promise = Pokemon.findOne({ _id : '5666fd32ff4ea39e23e1528f' }).exec();
+promise.then(success , error);
+```
+
+###### Código 04
+```js
+const pokemon = {
+            name : "Pompeu Limp",
+            type : "Fire",
+            attack : 99,
+            defence : 99,
+            height : 1.82,
+            description : "jiujitero"
+};
+
+let promise = Pokemon
+    .update({ _id : '5666ff2a9fa2a10c25d57ef7'},pokemon).exec();
+
+promise.then(success , error);
+```
+
+###### Código 05
+```js
+let promise = Pokemon.remove({_id :’ '5666ff2a9fa2a10c25d57ef7'’})
+promise.then(success , error);
+```
+
+
 ### Links importantes:
 - NodeJS
  - [Chat NodeJS - Rocket](http://be-mean.rocket.chat/channel/node)

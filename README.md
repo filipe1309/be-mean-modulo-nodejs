@@ -1204,7 +1204,7 @@ Esse módulo pode ser acessado através do módulo
 require(‘events’)
 ```
 
-Eventos podem ser nominados de acordo com a necessidade de cada função, contudo eles seguem um padrão para emissão (emit) e escuta (listener) de eventos.
+Eventos podem ser nominados de acordo com a necessidade de cada função, contudo eles seguem um padrão para emissão (emit) e escuta (listener/on) de eventos.
 
 ```js
 obj.emit(“event:name”, value)

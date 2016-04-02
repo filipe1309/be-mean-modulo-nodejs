@@ -1396,8 +1396,8 @@ fs.readFile('./persons.json','utf-8', function(err, persons){
 function sendFiles(files){
     //mapeando os arquivos
     var arr = files.map(function(person) {
-                            return person.concat(person)
-                        });
+        return person.concat(person)
+    });
     //lendo o resultado
     console.log(arr[0]);
 }
@@ -1464,7 +1464,7 @@ Promise.all([
 Nos models do mongoose assim como temos Eventemitters por padrão, podemos também trabalhar com Promise, que ajuda muito a deixar o código simples de manter e testar.
  + http://mongoosejs.com/docs/promises.html
 
-###### Código 01
+###### Código 01 - Promise no `create`
 ```js
 'use strict';
 
@@ -1494,7 +1494,7 @@ function error (err) {
 }
 ```
 
-###### Código 02
+###### Código 02 - Promise no `find`
 ```js
 'use strict';
 
@@ -1506,7 +1506,7 @@ let promise = Pokemon.find({}).exec();
 promise.then(success, error);
 ```
 
-###### Código 03
+###### Código 03 - Promise no `findOne`
 ```js
 'use strict';
 
@@ -1519,7 +1519,7 @@ let promise = Pokemon.findOne({ _id : '5666fd32ff4ea39e23e1528f' }).exec();
 promise.then(success , error);
 ```
 
-###### Código 04
+###### Código 04 - Promise no `update`
 ```js
 const pokemon = {
             name : "Pompeu Limp",
@@ -1530,17 +1530,19 @@ const pokemon = {
             description : "jiujitero"
 };
 
-let promise = Pokemon
-    .update({ _id : '5666ff2a9fa2a10c25d57ef7'},pokemon).exec();
+let promise = Pokemon.update({ _id : '5666ff2a9fa2a10c25d57ef7'},pokemon).exec();
 
 promise.then(success , error);
 ```
 
-###### Código 05
+###### Código 05 - Promise no `remove`
 ```js
 let promise = Pokemon.remove({_id :’ '5666ff2a9fa2a10c25d57ef7'’})
 promise.then(success , error);
 ```
+https://spion.github.io/posts/why-i-am-switching-to-promises.html
+http://stackoverflow.com/questions/9022099/how-to-use-mongoose-promise-mongo
+http://erikaybar.name/using-es6-promises-with-mongoosejs-queries/
 
 
 ### Links importantes:

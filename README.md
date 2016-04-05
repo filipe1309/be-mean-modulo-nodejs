@@ -1549,6 +1549,7 @@ http://erikaybar.name/using-es6-promises-with-mongoosejs-queries/
 - NodeJS
  - [Chat NodeJS - Rocket](http://be-mean.rocket.chat/channel/node)
  - [Repositório de exercícios](https://github.com/Webschool-io/be-mean-instagram-nodejs-exercises)
+ - [Node Atomic Design - Modelo Padrão](https://github.com/Webschool-io/Node-Atomic-Design-Modelo-Padrao)
 
 
 - Geral

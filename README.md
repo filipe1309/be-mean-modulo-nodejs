@@ -995,7 +995,7 @@ será o responsável por fazer a busca pelos **_ids** especificados no campo com
  - [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gfd3afa4fe_0_412)
  - [Vídeo](https://www.youtube.com/watch?v=02a_lo_KLwU)
 
-##### Resumo
+#### Resumo
 ###### Validação
 - Validação é definida no tipo do campo, no `Schema`;
 - Validação é uma peça interna do *Middleware*;
@@ -1166,7 +1166,7 @@ Pokemon.update(query, mod, function (err, data) {
  - [Descrição do exercício](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/classes/nodejs/exercises/class-06.md)
  - [Resolução do exercício](https://github.com/filipe1309/be-mean-modulo-nodejs/blob/master/exercises/class-06-resolved-filipe1309-filipe-leuch-bonfim.md)
 
-##### Resumo
+#### Resumo
 ###### Delete
 - default -> multi: true
 Exemplo
@@ -1198,7 +1198,7 @@ Pokemon.remove(query, function (err, data) {
  - [Descrição do exercício](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/classes/nodejs/exercises/class-07.md)
  - [Resolução do exercício](https://github.com/filipe1309/be-mean-modulo-nodejs/blob/master/exercises/class-07-resolved-filipe1309-filipe-leuch-bonfim.md)
 
-##### Resumo
+#### Resumo
 Esse módulo pode ser acessado através do módulo
 ```js
 require(‘events’)
@@ -1540,10 +1540,294 @@ promise.then(success , error);
 let promise = Pokemon.remove({_id :’ '5666ff2a9fa2a10c25d57ef7'’})
 promise.then(success , error);
 ```
-https://spion.github.io/posts/why-i-am-switching-to-promises.html
-http://stackoverflow.com/questions/9022099/how-to-use-mongoose-promise-mongo
-http://erikaybar.name/using-es6-promises-with-mongoosejs-queries/
+https://spion.github.io/posts/why-i-am-switching-to-promises.html  
+http://stackoverflow.com/questions/9022099/how-to-use-mongoose-promise-mongo  
+http://erikaybar.name/using-es6-promises-with-mongoosejs-queries/  
 
+### Aula 08 - 1/6
+#### [Mongoose - Arquitetura Atômica](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/module-nodejs/pt-br/mongoose-atomic-design.md)
+
+ - [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gf9c5c9121_0_38)
+ - [Vídeo](https://www.youtube.com/watch?v=i6h1A-l11-k)
+ - [Descrição do exercício](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/classes/nodejs/exercises/class-07.md)
+ - [Resolução do exercício](https://github.com/filipe1309/be-mean-modulo-nodejs/blob/master/exercises/class-07-resolved-filipe1309-filipe-leuch-bonfim.md)
+
+#### Resumo
+A Arquitetura Atômica no Mongoose a forma em que separamos seus arquivos/contextos como:
+
+- validação;
+- campo;
+- schema;
+- model;
+- etc.
+
+A fim de facilitar seu re-uso e manutenção.
+
+
+
+
+### Aula 08 - 2/6
+#### [Validate]()
+
+#### Resumo
+
+
+##### Validate
+Validação customizada
+Para criar uma validação customizada é bem simples, basta passar um objeto para o atributo validate do seu campo, no Schema:
+```js
+age: {
+  type: Number,
+  validate: {
+    validator: function(v) {
+      return v >= 18;
+    },
+    message: 'Sua idade({VALUE}) não é permitida!'
+  }
+}
+```
+Validadores sempre recebem o valor para validar como seu primeiro argumento e devem
+retornar um valor booleano.
+*Retornando false significa que a validação falhou*.
+
+Vamos testar a validação:
+```js
+const User = mongoose.model('user', userSchema);
+const u = new User();
+
+u.age = 24;
+console.log(u.validateSync());
+
+u.age = 6;
+console.log(u.validateSync().toString());
+
+u.age = 2;
+console.log(u.validateSync());
+```
+
+Executando essa validação temos:
+```
+undefined
+ValidationError: Sua idade(6) não é permitida!
+{ [ValidationError: user validation failed]
+  message: 'user validation failed',
+  name: 'ValidationError',
+  errors:
+   { age:
+      { [ValidatorError: Sua idade(2) não é permitida!]
+        properties: [Object],
+        message: 'Sua idade(2) não é permitida!',
+        name: 'ValidatorError',
+        kind: 'user defined',
+        path: 'age',
+        value: 2 } } }
+```
+*undefined* é o retorno de uma validação de sucesso e logo abaixo temos apenas a mensagem
+de erro que vem de *u.validateSync().toString()*
+e por último objeto de erro que já conhecemos.
+
+Agora vamos tentar *validateSync().toString()* com um valor maior que 18:
+```js
+u.age = 69;
+console.log(u.validateSync().toString());
+```
+
+```js
+console.log(u.validateSync().toString());
+                                             ^
+TypeError: Cannot read property 'toString' of undefined
+    at Object.<anonymous> (/Users/jeancarlonascimento/www/projetos/webschool/cursos/be-mean-instagram/repo-oficial/Apostila/module-nodejs/src/mongoose/schemas/teste.js:23:29)
+    at Module._compile (module.js:399:26)
+    at Object.Module._extensions..js (module.js:406:10)
+    at Module.load (module.js:345:32)
+    at Function.Module._load (module.js:302:12)
+    at Function.Module.runMain (module.js:431:10)
+    at startup (node.js:141:18)
+    at node.js:977:3
+```
+Com isso conseguimos deduzir que a função *toString* não existe em *undefined* e podemos provar isso indo
+no console do node, para isso basta
+executar *node* no seu terminal.
+
+```
+➜  ~  node
+> undefined.toString()
+TypeError: Cannot read property 'toString' of undefined
+    at repl:1:10
+    at REPLServer.defaultEval (repl.js:252:27)
+    at bound (domain.js:281:14)
+    at REPLServer.runBound [as eval] (domain.js:294:12)
+    at REPLServer.<anonymous> (repl.js:417:12)
+    at emitOne (events.js:83:20)
+    at REPLServer.emit (events.js:170:7)
+    at REPLServer.Interface._onLine (readline.js:211:10)
+    at REPLServer.Interface._line (readline.js:550:8)
+    at REPLServer.Interface._ttyWrite (readline.js:827:14)
+> "Suissa".toString()
+'Suissa'
+```
+*Por isso cuidado ao usar essa função, tenha certeza
+que esteja executando em um erro!*
+
+Vamos criar uma validação um pouco mais complexa agora:
+```js
+const validateEmail = function(email) {
+    const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return re.test(email)
+};
+const EmailSchema = new Schema({
+  email: {
+    type: String
+  , trim: true
+  , unique: true
+  , required: 'Email é obrigatório'
+  , validate: [validateEmail, 'Preencha com um email válido']
+  }
+});
+const Email = mongoose.model('Email', EmailSchema);
+const mail = new Email({email: "suissera@webschool.io"});
+
+console.log(mail.validateSync());
+```
+
+Existe mais uma forma de utilizar a validação com Mongoose, utilizando o *Model.schema.path('campo')*,
+passando uma função e a mensagem
+de erro para o *validate*.
+
+```js
+const RequisitosSchema = new Schema({
+  name: String
+});
+const Requisitos = mongoose.model('Requisitos', RequisitosSchema);
+
+Requisitos.schema.path('name').validate(function (value) {
+  return /js|html|css|angular|node|mongodb/i.test(value);
+}, 'Requisito({VALUE}) inválido!');
+
+const req = new Requisitos({ name: 'php'});
+console.log(req.validateSync());
+```
+
+##### Getters e Setters
+Getters e setters ajudam a mudar a forma como você obtém e/ou define os atributos do documento.
+
+##### Setters
+Setters permitem que você transforme os dados originais antes que cheguem ao documento.
+
+Suponha que você está implementando o registro do usuário para um site. Usuário fornecer um e-mail e senha, que fica guardado no MongoDB. O e-mail é uma seqüência de caracteres que você vai querer normalizar para minúsculas.
+
+Você pode configurar a normalização do e-mail para minúsculas facilmente através de um setter.
+```js
+function toLower (v) {
+  return v.toLowerCase();
+}
+
+const UserSchema = new Schema({
+  email: { type: String, set: toLower }
+});
+
+const User = mongoose.model('User', UserSchema);
+const user = new User({email: 'SUISSERA@webschool.io'});
+
+console.log(user.email); // 'suissera@webschool.io';
+```
+
+##### Getters
+Getters permitem que você transforme a representação dos dados, uma vez que é transformado a partir do documento para o valor que você vê.
+
+Suponha que você queira retornar o título do post todo em maiúscula.
+
+Você pode fazê-lo através da definição de um getter.
+
+```js
+function apenasMaiusculas (v) {
+  return v.toUpperCase();
+}
+const CommentsSchema = new Schema({
+  title: String
+, body: String
+, date: Date
+});
+const BlogPostSchema = new Schema({
+  title: { type: String, get: apenasMaiusculas }
+, body: String
+, comments: [CommentsSchema]
+});
+
+const BlogPostModel = mongoose.model('BlogPost', BlogPostSchema);
+const post_id = '569e36b2d6a928b526db9135';
+
+BlogPostModel.findById(post_id, function (err, post) {
+  if (err) return console.log('Erro:', err);
+  return console.log('Título: ', post.title);
+});
+```
+
+##### Virtuals
+O Mongoose suporta atributos virtuais, que são convenientes em alguns momentos, mas
+*não são armazenados no MongoDB*.
+
+Pense no seguinte Schema:
+```js
+const PersonSchema = new Schema({
+  name: {
+    first: String
+  , last: String
+  }
+});
+const Person = mongoose.model('Person', PersonSchema);
+
+const Suissao = new Person({
+    name: { first: 'Jean', last: 'Suissa' }
+});
+```
+Se você quiser mostrar o nome completo terá que fazer:
+```js
+console.log(Suissao.name.first + ' ' + Suissao.name.last);
+```
+É mais conveniente definir um atributo virtual *name.full* e escrever dessa forma:
+```js
+console.log(Suissao.name.full);
+```
+
+Para fazer isso basta passar 'name.full' para a função virtual do Schema:
+```js
+PersonSchema
+.virtual('name.full')
+.get(function () {
+  return this.name.first + ' ' + this.name.last;
+});
+```
+
+Agora buscando o `Person` para verificar seu nome completo:
+```js
+Person.findById('569e513f7672012c28da89f1', (err, data) => {
+  if (err) return console.log('Erro:', err);
+  return console.log('Nome completo: ', data.name.full);
+});
+```
+Retornando:
+
+Nome completo:  Jean Suissa
+
+Vamos fazer um outro campo virtual que irá retornar apenas as iniciais de `Person`:
+
+```js
+PersonSchema
+.virtual('name.initials')
+.get(function () {
+  return this.name.first[0] + this.name.last[0];
+});
+
+const Person = mongoose.model('Person', PersonSchema);
+
+Person.findById('569e513f7672012c28da89f1', (err, data) => {
+  if (err) return console.log('Erro:', err);
+  return console.log('Iniciais: ', data.name.initials);
+});
+```
+Retornando:
+Iniciais:  JS
 
 ### Links importantes:
 - NodeJS

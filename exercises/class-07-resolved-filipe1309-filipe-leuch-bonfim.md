@@ -58,8 +58,8 @@ init => Bazinga!!!
 const fs =  require('fs');
 
 function readDir(path) {
-    return new Promise(function(resolve, reject) {
-        fs.readdir(path, function(err, res) {
+    return new Promise(function (resolve, reject) {
+        fs.readdir(path, function (err, res) {
             err ? reject(err) : resolve(res);
         });
     });
@@ -90,13 +90,18 @@ myPromiseAll([
 
 ### 3 - Os schemas do mongoose podem usar promises, em seus alguns methods, de “crud”, list 3 methods que usam promise , se chamada da função exec(), no final e 3 que usam exec(), mostre ao menos um exemplo de cada.
 
-#### 3 - sem `exec()`: `find`, `create`, `remove`
+#### 3 - sem `exec()`:
+- `find`,
+- `create`,
+- `remove`
 
 
-#### 3 - com `exec()`: `find`, `findOne`, `update`
+#### 3 - com `exec()`:
+- `find`,
+- `findOne`,
+- `update`
 
-
-
+#### ex3_mongoose_promise.js
 ```js
 'use strict';
 
@@ -118,6 +123,7 @@ const band1 = {
 };
 
 // 3 métodos - sem exec()
+
 let findPromise = BandsModel.find({name: 'Linkin Park'});
 findPromise.then(success, error);
 // [ { name: 'Linkin Park', _id: 56ff424dcb3f181e1d0ae7a6 } ]

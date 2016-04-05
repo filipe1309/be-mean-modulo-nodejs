@@ -15,7 +15,7 @@ const bandsSchema = new Schema({
 var BandsModel = mongoose.model('bands', bandsSchema);
 
 const band1 = {
-    name: 'Manonas assassinas'
+  name: 'Manonas assassinas'
 };
 
 //var band = new BandsModel(data);
@@ -49,9 +49,9 @@ updatePromise.then(success , error);
 
 
 function success(data) {
-    console.log(data);
+  console.log(data);
 }
 
-function error (err) {
-    console.log(err);
+function error(err) {
+  console.log(err);
 }

@@ -1547,10 +1547,8 @@ http://erikaybar.name/using-es6-promises-with-mongoosejs-queries/
 ### Aula 08 - 1/6
 #### [Mongoose - Arquitetura Atômica](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/module-nodejs/pt-br/mongoose-atomic-design.md)
 
- - [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gf9c5c9121_0_38)
- - [Vídeo](https://www.youtube.com/watch?v=i6h1A-l11-k)
- - [Descrição do exercício](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/classes/nodejs/exercises/class-07.md)
- - [Resolução do exercício](https://github.com/filipe1309/be-mean-modulo-nodejs/blob/master/exercises/class-07-resolved-filipe1309-filipe-leuch-bonfim.md)
+ - [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gebeab41d1_0_230)
+ - [Vídeo](https://www.youtube.com/watch?v=tscqqhVQje8)
 
 #### Resumo
 A Arquitetura Atômica no Mongoose a forma em que separamos seus arquivos/contextos como:
@@ -1568,9 +1566,10 @@ A fim de facilitar seu re-uso e manutenção.
 
 ### Aula 08 - 2/6
 #### [Validate]()
+- [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gfd4f1232f_155_6)
+- [Vídeo](https://www.youtube.com/watch?v=_wj0y_77CYs)
 
 #### Resumo
-
 
 ##### Validate
 Validação customizada
@@ -1586,27 +1585,46 @@ age: {
   }
 }
 ```
-Validadores sempre recebem o valor para validar como seu primeiro argumento e devem
-retornar um valor booleano.
+Validadores sempre recebem o valor para validar como seu primeiro argumento e devem retornar um valor booleano.
 *Retornando false significa que a validação falhou*.
 
 Vamos testar a validação:
+*schema-validate-age.js*
 ```js
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const ObjectId = mongoose.ObjectId;
+
+mongoose.connect('mongodb://localhost/teste');
+
+
+const userSchema = new Schema({
+  age: {
+    type: Number,
+    validate: {
+      validator: function(v) {
+        return v >= 18;
+      },
+      message: 'Sua idade({VALUE}) não é permitida!'
+    }
+  }
+});
+
 const User = mongoose.model('user', userSchema);
 const u = new User();
 
-u.age = 24;
-console.log(u.validateSync());
+// u.age = 24;
+// console.log('Validou: ', u.validateSync());
 
-u.age = 6;
-console.log(u.validateSync().toString());
+u.age = 69;
+console.log('Apenas msg:', u.validateSync().toString());
 
-u.age = 2;
-console.log(u.validateSync());
+// u.age = 2;
+// console.log('Todo objeto: ', u.validateSync());
 ```
 
 Executando essa validação temos:
-```
+```js
 undefined
 ValidationError: Sua idade(6) não é permitida!
 { [ValidationError: user validation failed]
@@ -1649,7 +1667,7 @@ Com isso conseguimos deduzir que a função *toString* não existe em *undefined
 no console do node, para isso basta
 executar *node* no seu terminal.
 
-```
+```js
 ➜  ~  node
 > undefined.toString()
 TypeError: Cannot read property 'toString' of undefined
@@ -1670,10 +1688,13 @@ TypeError: Cannot read property 'toString' of undefined
 que esteja executando em um erro!*
 
 Vamos criar uma validação um pouco mais complexa agora:
+*schema-validate-email.js*
 ```js
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 const validateEmail = function(email) {
     const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    return re.test(email)
+    return re.test(email);
 };
 const EmailSchema = new Schema({
   email: {
@@ -1685,7 +1706,7 @@ const EmailSchema = new Schema({
   }
 });
 const Email = mongoose.model('Email', EmailSchema);
-const mail = new Email({email: "suissera@webschool.io"});
+const mail = new Email({email: null});
 
 console.log(mail.validateSync());
 ```
@@ -1828,6 +1849,346 @@ Person.findById('569e513f7672012c28da89f1', (err, data) => {
 ```
 Retornando:
 Iniciais:  JS
+
+##### Embedded Documents
+Documentos incorporados(embedded) desfrutam
+dos mesmos recursos que os Models.
+Sempre que ocorrer um erro ele
+irá para o callback do *save()*.
+
+###### Adicionando
+Exemplo de Blog:
+
+```js
+const CommentsSchema = new Schema({
+  title: String,
+  body: String,
+  date: Date
+});
+
+const BlogPostSchema = new Schema({
+  title: String,
+  body: String,
+  comments: [CommentsSchema]
+});
+
+const BlogPostModel = mongoose.model('BlogPost', BlogPostSchema);
+```
+O atributo *comments* em BlogPostSchema será uma instância de *DocumentArray*, que é um subclasse especial de *Array* que possui métodos específicos para trabalhar com documentos incorporados.
+```js
+const post = {
+  title: 'Primeiro POST'
+, body: 'Post inicial do blog UEBAAA'
+, date: Date.now()
+}
+const comment = {
+  title: 'Comentei aqui'
+, body: 'Tá comentando meu fiiiii!'
+, date: Date.now()
+};
+const BlogPostModel = mongoose.model('BlogPost', BlogPostSchema);
+const BlogPost = new BlogPostModel(post);
+
+BlogPost.comments.push(comment);
+BlogPost.save(function (err, data) {
+  if (err) return console.log('Erro:', err);
+  return console.log('Sucesso:', data);
+});
+```
+```js
+Sucesso: { comments:
+   [ { _id: 569e300ad1455a8326c9aa92,
+       date: Tue Jan 19 2016 10:46:02 GMT-0200 (BRST),
+       body: 'Tá comentando meu fiiiii!',
+       title: 'Outro comentário' } ],
+  _id: 569e300ad1455a8326c9aa91,
+  body: 'Post inicial do blog UEBAAA',
+  title: 'Primeiro POST',
+  __v: 0 }
+```
+
+###### Removendo
+Para remover um documento incorporado precisamos primeiramente buscar o documento "pai", pelo `_id` de preferência, para depois selecionar qual documento interno deve ser removido e depois
+salvar o documento modificado.
+```js
+const BlogPostModel = mongoose.model('BlogPost', BlogPostSchema);
+const BlogPost = new BlogPostModel(post);
+const id = '569e300ad1455a8326c9aa91';
+
+BlogPostModel.findById(id, function (err, post) {
+
+  if (err) return console.log('Erro:', err);
+  console.log('post.comments', post.comments)
+  post.comments[0].remove();
+  post.save(function (err, data) {
+    if (err) return console.log('Erro interno:', err);
+    return console.log('Sucesso:', data);
+  });
+});
+```
+```js
+post.comments [{ title: 'Outro comentário',
+  body: 'Tá comentando meu fiiiii!',
+  date: Tue Jan 19 2016 10:46:02 GMT-0200 (BRST),
+  _id: 569e300ad1455a8326c9aa92 }]
+Sucesso: { comments: [],
+  __v: 1,
+  body: 'Post inicial do blog UEBAAA',
+  title: 'Primeiro POST',
+  _id: 569e300ad1455a8326c9aa91 }
+```
+
+###### Procurando pelo `_id`
+O tipo *DocumentArray* possui o método especial
+*id()* o qual filtra os documentos incorporados
+pelo seu atributo `_id`.
+```js
+const BlogPostModel = mongoose.model('BlogPost', BlogPostSchema);
+const BlogPost = new BlogPostModel(post);
+const post_id = '569e36b2d6a928b526db9135';
+const comment_id = '569e36b2d6a928b526db9136';
+
+BlogPostModel.findById(post_id, function (err, post) {
+  if (err) return console.log('Erro:', err);
+  console.log('Achou esse comentário: ', post.comments.id(comment_id));
+});
+```
+```js
+Achou esse comentário:  { title: 'Outro comentário',
+  body: 'Tá comentando meu fiiiii!',
+  date: Tue Jan 19 2016 11:14:26 GMT-0200 (BRST),
+  _id: 569e36b2d6a928b526db9136 }
+```
+
+###### Mongoose Plugins
+- Os Schemas do mongoose, são passives do uso de plugins,  que permitem a adição de recursos aos models/schemas, isso ajuda muito no reuso dos plugins e deixa o schema mais flexivel.
+
+- Um exemplo do uso de plugins é quando existe a necessidade de criar um novo campo, em uma collection. Veja um exemplo básico de um schema simples no *Código 01*, mais adiante será adicionado um plugin nesse schema.
+```js
+'use strict';
+
+var mongoose  = require('mongoose'),
+    Schema    = mongoose.Schema;
+
+var BlogPost = new Schema({
+  id    : Schema.ObjectId,
+  title : {type : String, required : true},
+  body  : {type : String, required : true}
+});
+```
+
+###### Criando Primeiro Plugin
+- Ao longo do tempo, verifica-se que a estrutura usado no schema do BlogPost esta deficiente, foi verificado que dois novos campos são necesários, um para gravar a data de criação e outro para gravar da data de alteração.
+
+- Para quem já estudou Padrão de Projetos vai notar a semelhança de plugins com decorators.
+```js
+'use strict';
+
+function timestemp (schema, options) {
+  schema.add({created_at : {type : Date, default  : Date.now()}});
+  schema.add({update_at  : {type : Date, default : Date.now()}});
+}
+
+module.exports = timestemp;
+```
+
+Algumas observações devem ser feitas.
+Primeiro todo plugin deve seguir esse padrão, ele recebe dois argumentos, um é o proprio schema e o segundo são opções
+
+###### Attach Plugin in Schema
+- Para “atachar” um plugin ao model é muito simples, pois todo schema já possui um schema.plugin(plugin), essa função recebe um plugin como argumento
+- Vamos Ver como fica um schema com o plugin
+
+```js
+var mongoose  = require('mongoose'),
+    Schema    = mongoose.Schema,
+    timestemp = require('../plugins/timestemp');
+
+var bloogPost = new Schema({
+  id    : Schema.ObjectId,
+  title : {type : String, required : true},
+  body  : {type : String, required : true}
+});
+bloogPost.plugin(timestemp);
+module.exports = mongoose.model('Post', bloogPost);
+```
+
+Ao criar um documento no mongodb, usando esse schema sera adicionado dois novos atributos, create_at e update_at,  caso crie um novo schema de users por exemplo, pode-se usar esse plugin.
+
+Contudo plugins vão muito alem disso, pode-se usar eles com os events do mongoose isso sera abordado mais adiante em outra aula.
+
+###### Mongoose Populate
+Não existe uma forma nativa para se fazer “joins” no mongodb, lembrando que join e uma prática que vem do modelo RELACIONAL, onde existe a necessidade de juntar valores de duas tabelas ou mais. Para que isso seja feito no mongodb, sera usado mongoose para ajudar e deixar simples essa atividade.
+
+###### Criando Model
+```js
+'use strict';
+
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+let userschema = new Schema({
+  name : String
+});
+
+module.exports = mongoose.model('User',userschema);
+```
+```js
+'use strict';
+
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+let postschema = new Schema({
+  body : String,
+  _user : {
+    type : Schema.ObjectId,
+    ref  : 'User'
+  }
+});
+
+module.exports = mongoose.model('Post',postschema);
+```
+
+###### Criando User
+###### Criando Post
+###### Buscando Post
+
+
+###### Populate
+
+###### Considerações Finais
+###### Indexes
+Quando o aplicativo é iniciado, o Mongoose chama automaticamente *ensureIndex* para cada índice definido no seu Schema.
+
+```js
+Mongoose chamará *ensureIndex* sequencialmente para cada índice, os quais emitem um evento *index* no Model quando todas as chamadas de *ensureIndex* forem sucesso ou quando houver um erro.
+
+const userSchema = new Schema({
+  name: String,
+  email: String,
+  created_at: { type: String, , default: Date.now, index: true }
+});
+
+userSchema.index({ name: 1, type: -1 });
+```
+Recomenda-se que seja desativado em produção, a criação do índice pode causar um impacto significativo no desempenho. Para desativar esse comportamento, basta definir a opção autoIndex do seu Schema para false, ou globalmente na conexão, definindo a opção config.autoIndex como false.
+
+```js
+userSchema.set('autoIndex', false);
+// ou
+new Schema({..}, { autoIndex: false });
+```
+Mas ele só impacta quando você levanta seu sistema, sabendo disso você não precisa seguir essa recomendação de desligar o `autoIndex`, pois ele irá garantir certa integridade dos seus dados.
+
+###### Methods e Statics
+No Mongoose podemos definir métodos específicos para um Schema, como também métodos "estáticos".
+
+###### Methods
+Para se definir um método é muito simples, basta criar ele no objeto *Schema.methods*:
+```js
+const _schema = {
+  name:  String, description: String, type: String, attack: Number, defense: Number, height: Number
+};
+const PokemonSchema = new Schema(_schema);
+
+PokemonSchema.methods.findSimilarType = function (cb) {
+  return this.model('Pokemon').find({ type: this.type }, cb);
+};
+const Pokemon = mongoose.model('Pokemon', PokemonSchema);
+const poke = new Pokemon({ name: 'Teste', type: 'inseto' });
+
+poke.findSimilarType(function (err, data) {
+  if (err) return console.log('Erro:', err);
+  return data.forEach((pokemon) => console.log('pokemon: ', pokemon));
+```
+
+Como retornamos o *find*, que é uma instância de *Query*, na função *findSimilarType* podemos escrever a busca dessa forma:
+```js
+poke
+.findSimilarType()
+.where('defense').gt(50)
+.limit(2)
+.exec(function (err, data) {
+  if (err) return console.log('Erro:', err);
+  return data.forEach((pokemon) => console.log('pokemon: ', pokemon));
+});
+```
+
+###### Statics
+Além dos métodos normais também podemos
+criar os métodos estáticos, os quais sempre
+estarão acessíveis no seu Model.
+```js
+const PokemonSchema = new Schema(_schema);
+
+PokemonSchema.statics.search = function (name, cb) {
+  return this.where('name', new RegExp(name, 'i')).exec(cb);
+};
+
+const Pokemon = mongoose.model('Pokemon', PokemonSchema);
+
+Pokemon.search('caterpie', function (err, data) {
+  if (err) return console.log('Erro:', err);
+  return data.forEach((pokemon) => console.log('pokemon: ', pokemon));
+});
+```
+O que fazemos na função *search* é receber um nome e depois retornamos um *find* implícito, pois usamos o *where* para testar o valor de `name` com uma expressão regular gerada pela função [RegExp](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp), finalizando com a execução do callback *cb*.
+
+###### Juntando tudo
+Vamos agora criar um Schema mais completo
+e atômico com o conhecimento adquirido.
+
+Já conhecemos o conceito de *Arquitetura Atômica* para o Mongoose, então vamos criar um Schema de usuário, primeiramente da forma simples:
+```js
+const userSchema = new Schema({
+  name: String
+, password: String
+, email: String
+, type: String
+, created_at: { type: Date, default: Date.now }
+});
+```
+
+Antes de tudo vamos criar um projeto novo chamado *mongoose-user* via *npm init*, depois instalando localmente o *mongoose* vamos copiar a pasta *fields* do projeto *mongoose-atomic* e colar na pasta do projeto *mongoose-user*.
+
+Agora salve o código abaixo como *schema.js* na pasta do *mongoose-user*:
+```js
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+mongoose.connect('mongodb://localhost/mongoose-user-test');
+
+const userSchema = new Schema({
+  name: String
+, password: String
+, email: String
+, type: String
+, created_at: { type: Date, default: Date.now }
+});
+```
+
+Pronto agora atomizamos nossos fields então está na hora de trabalhar em cada campo para definir suas peculiaridades, vamos começar pelo *name (fields/field-name)*.
+
+Vamos definir para esse field:
+
+- index;
+- virtual;
+- getter e setter;
+- validate.
+
+###### Arrow Function
+Onde você usaria uma função anônima agora use arrow function.
+
+Mas cuidado ele:
+- não aceita new
+- não possui arguments
+- this não pode ser mudado
+- this tem o valor onde foi criado e não chamado
+
+
+
+
 
 ### Links importantes:
 - NodeJS

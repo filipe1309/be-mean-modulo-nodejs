@@ -2050,28 +2050,53 @@ let postschema = new Schema({
 module.exports = mongoose.model('Post',postschema);
 ```
 
-###### Criando User
-###### Criando Post
-###### Buscando Post
+
+### Aula 08 - 3/6
+#### [Indexes]()
+- [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gfdaaa5a3a_5_39)
+- [Vídeo](https://www.youtube.com/watch?v=8M4pN64BsnU)
+
+#### Resumo
 
 
-###### Populate
-
-###### Considerações Finais
 ###### Indexes
 Quando o aplicativo é iniciado, o Mongoose chama automaticamente *ensureIndex* para cada índice definido no seu Schema.
 
-```js
 Mongoose chamará *ensureIndex* sequencialmente para cada índice, os quais emitem um evento *index* no Model quando todas as chamadas de *ensureIndex* forem sucesso ou quando houver um erro.
 
+###### schema-index.js
+```js
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+mongoose.connect('mongodb://localhost/teste');
+
 const userSchema = new Schema({
-  name: String,
-  email: String,
-  created_at: { type: String, , default: Date.now, index: true }
+  name: String
+, email: { type: String, unique: true }
+, created_at: { type: String, default: Date.now, index: true }
 });
 
-userSchema.index({ name: 1, type: -1 });
+// Índice composto
+userSchema.index({ name: 1, email: -1 });
+
+const User = mongoose.model('Usuario', userSchema);
+const _user = {
+  name: 'Segundo Usuario'
+, email: 'suissera@webschool.io'
+}
+
+User.create(_user, (err, data) => {
+  if (err) return console.log('Error: ', err);
+  return console.log('Inseriu:', data)
+});
 ```
+
+Para verificar se um indice foi criado:
+```js
+db.system.indexes.find()
+```
+
 Recomenda-se que seja desativado em produção, a criação do índice pode causar um impacto significativo no desempenho. Para desativar esse comportamento, basta definir a opção autoIndex do seu Schema para false, ou globalmente na conexão, definindo a opção config.autoIndex como false.
 
 ```js
@@ -2086,21 +2111,45 @@ No Mongoose podemos definir métodos específicos para um Schema, como também m
 
 ###### Methods
 Para se definir um método é muito simples, basta criar ele no objeto *Schema.methods*:
+###### schema-method.js
 ```js
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+mongoose.connect('mongodb://localhost/be-mean-instagram');
+
 const _schema = {
-  name:  String, description: String, type: String, attack: Number, defense: Number, height: Number
+  name:  String
+, description: String
+, type:   String
+, attack:   Number
+, defense:   Number
+, height:   Number
 };
 const PokemonSchema = new Schema(_schema);
 
+// Criando o método findSimilarType(), e atrelando na instância do model
 PokemonSchema.methods.findSimilarType = function (cb) {
   return this.model('Pokemon').find({ type: this.type }, cb);
 };
-const Pokemon = mongoose.model('Pokemon', PokemonSchema);
-const poke = new Pokemon({ name: 'Teste', type: 'inseto' });
 
+const Pokemon = mongoose.model('Pokemon', PokemonSchema);
+const poke = new Pokemon({ name: 'Teste', type: 'besta' });
+
+// Utilizando o método na instância do Model
 poke.findSimilarType(function (err, data) {
   if (err) return console.log('Erro:', err);
   return data.forEach((pokemon) => console.log('pokemon: ', pokemon));
+});
+
+// poke
+// .findSimilarType()
+// .where('attack').gt(9990)
+// .limit(4)
+// .exec(function (err, data) {
+//   if (err) return console.log('Erro:', err);
+//   return data.forEach((pokemon) => console.log('pokemon: ', pokemon));
+// });
 ```
 
 Como retornamos o *find*, que é uma instância de *Query*, na função *findSimilarType* podemos escrever a busca dessa forma:
@@ -2119,16 +2168,33 @@ poke
 Além dos métodos normais também podemos
 criar os métodos estáticos, os quais sempre
 estarão acessíveis no seu Model.
+
+###### schema-static.js
 ```js
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+mongoose.connect('mongodb://localhost/be-mean-instagram');
+
+const _schema = {
+  name:  String
+, description: String
+, type:   String
+, attack:   Number
+, defense:   Number
+, height:   Number
+};
 const PokemonSchema = new Schema(_schema);
 
+// Criando um método estático, e atrelando diretamento na classe do model
 PokemonSchema.statics.search = function (name, cb) {
   return this.where('name', new RegExp(name, 'i')).exec(cb);
 };
 
 const Pokemon = mongoose.model('Pokemon', PokemonSchema);
 
-Pokemon.search('caterpie', function (err, data) {
+// Utilizando o método estático diretamente na classe do Model
+Pokemon.search('pikachu', function (err, data) {
   if (err) return console.log('Erro:', err);
   return data.forEach((pokemon) => console.log('pokemon: ', pokemon));
 });

@@ -1,0 +1,19 @@
+{
+  "name": "mongoose-user",
+  "version": "0.0.1",
+  "description": "Exercício da aulo 08 do Módulo Node.js da WebSchool.io",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node.js",
+    "mongoose",
+    "mongodb"
+  ],
+  "author": "Filipe Leuch Bonfim",
+  "license": "WTFPL",
+  "dependencies": {
+    "mongoose": "^4.4.11"
+  }
+}

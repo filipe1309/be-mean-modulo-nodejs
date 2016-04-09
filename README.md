@@ -2254,6 +2254,243 @@ Mas cuidado ele:
 
 
 
+### Aula 08 - 4/6
+#### [Mongoose Middleware]()
+- [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gfdaaa5a3a_5_39)
+- [Vídeo](https://www.youtube.com/watch?v=xR3ex_YjQyc)
+
+#### Resumo
+
+
+
+### Aula ESPECIAL
+#### [ES6]()
+- [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gebeab41d1_0_382)
+- [Vídeo](https://www.youtube.com/watch?v=sw7kPzkIN4g)
+
+#### Resumo
+Nesta aula foram apresentados conceitos sobre:
+- let;
+- const;
+- arrow function.
+
+##### let
+O *let* é o substituto para o *var*, pois futuramente o *var* será descontinuado.
+Porque o *let* se comporta como o esperado de uma variável.
+Explicação:
+quando você quer pegar o valor de uma variável pressupõe-se que ela
+já tenha sido criada, correto?
+
+```js
+a = 1;
+var a;
+console.log(a);
+```
+```js
+'use strict';
+a = 1;
+let a; // Error
+console.log(a);
+```
+
+- com *let sempre precisamos declarar as variáveis antes*
+```js
+'use strict';
+let a;
+a = 1;
+console.log(a); //1
+```
+
+- *não pode redeclarar variáveis com let*, para resolver isso basta não usar o let quando for modificar o valor de uma variável já criada.
+
+- let e *hoisting*
+```js
+'use strict';
+function pimba() {
+  // var naGorduchinha = undefined; -> hoisting/içamento por trás dos panos
+  console.log(naGorduchinha); // undefined
+  var naGorduchinha = true;
+}
+pimba();
+```
+Agora mude para *let*:
+```js
+'use strict';
+function pimba() {
+  console.log(naGorduchinha); // ReferenceError
+  let naGorduchinha = true;
+}
+pimba();
+```
+
+- let + `for`
+```js
+'use strict';
+// vai i, foi declarada fora do laço for por causa do hoisting
+for(var i = 0; i < 10; i ++){}
+console.log(i); // 10
+
+// let i, só existe dentro do laço for
+for(let i = 0; i < 10; i ++){}
+console.log(i); // ReferenceError: i is not defined
+```
+
+
+##### const
+Esta declaração cria uma constante que pode pertencer ao escopo global ou local de uma função.
+
+- Constantes são block-scoped.
+
+- O valor de uma constante não pode ser alterado via re-atribuição, e uma constante não pode ser redeclarada.
+
+- É obrigatório que um valor seja atribuido à constante em sua declaração.
+
+- Uma constante não deve compartilhar o nome com uma função ou variável em um mesmo escopo.
+
+```js
+const version = 7;
+version = 20;
+const version = 20; // TypeError: Identifier 'version' has already been declared
+
+// não modifica o valor
+var version = 20; // undefined
+console.log("Versão: " + version); // 7
+
+// // Atribuir valores a uma variável const é um erro de sintaxe
+const a = 1; a = 2;
+
+// const também funciona com objetos
+const user = {name: "Suissa"};
+
+user = {name: "Itacir"};
+console.log(user); //Suissa
+
+// Entretando, atributos de objetos não estão protegidos,
+// logo a seguinte instrução é executada sem problemas
+user.name = "Caio";
+console.log(user); //Caio
+
+function pimba() {
+  const naGorduchinha = true;
+  console.log(naGorduchinha); //true
+}
+
+pimba();
+
+const naGorduchinha = false;
+console.log(naGorduchinha); //false
+```
+
+##### arrow function
+Uma *arrow function* é uma função que possui uma sintaxe mais curta quando comparada com a função normal, vinculando o valor de *this* de maneira léxica.
+
+Arrow functions sempre são anônimas.
+
+```js
+function (x) { return x; }
+(x) => x;
+
+console.log(function (x) { return x; });
+console.log((x) => x);
+
+function pimba (x) { return x; }
+// pimba(x) =>  { return x; } NÃO EXISTE
+
+const pimba = function (x) { return x; }
+const pimba = (x) => x;
+console.log(pimba(420));
+
+
+console.log(x => x);
+
+console.log((x,y) => x+y);
+console.log(x,y => x+y); //ERROOOOO
+```
+
+```js
+normal(); // NORMAL
+arrow(); // TypeError: arrow is not a function
+
+function normal() { console.log("NORMAL"); }
+const arrow = () => { console.log("ARROW"); };
+
+// () => {} // undefined
+// () => ({}) // {}
+```
+
+Como usamos *{}* para a abertura do bloco da nossa função ele irá retornar *undefined* pois não nenhum retorno dela, agora se encapsularmos *{}* dentro de *()* estaremos retornando esse objeto vazio.
+
+- arrow function + IIFE
+```js
+// ES5
+const a = (function(x) {
+  return x
+})(10);
+console.log(a);
+
+// ES6
+// const b = ((x) => {
+//   x
+// })(10);
+const b = ((x) => {
+  return x
+})(10);
+console.log(b);
+```
+
+A *arrow function* nos proporciona um atalho
+para criação de callbacks.
+
+```js
+// ES5
+[1,2,3].map(function(x) { return x * x });
+console.log([1,2,3].map(function(x) { return x * x }));
+
+// ES6
+[1,2,3].map(x => x * x);
+console.log([1,2,3].map(x => x * x));
+
+[2,true].map(x => { if (typeof x === 'number') return x * x; else return x; })
+console.log([2,true].map(x => { if (typeof x === 'number') return x * x; else return x; }));
+
+// [2,true, 3].map(x => {
+//   if (typeof x === 'number') {
+//     if (x % 2 === 0) return x;
+//     return x * x;
+//   }
+// });
+
+console.log([2,true, 3].map(x => {
+  if (typeof x === 'number') {
+    if (x % 2 === 0) return x; // par
+    return x * x; // impar
+  }
+  else return x;
+}));
+```
+
+Exemplo: uma função que retorne outra função que retorne um valor.
+
+```js
+// ES5
+function onPower(exponent) {
+  return function(number) {
+    return Math.pow(number, exponent);
+  };
+}
+
+// ES6
+// One line
+const onPower = exponent => number => Math.pow(number, exponent);
+// Multiple lines
+const onPower = exponent => number => {
+  return Math.pow(number, exponent);
+};
+
+const square = onPower(2);
+console.log(square(5)); // 25
+```
+
 
 
 ### Links importantes:

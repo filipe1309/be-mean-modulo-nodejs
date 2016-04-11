@@ -7,7 +7,7 @@ const Field = {
 // , get: _get
 // , set: _set
 , validate: [ _validate, 'Senha precisa ser maior que 6 e menor que 10 caracteres' ]
-, required: true
+//, required: true
 }
 
 module.exports = Field;

@@ -5,7 +5,7 @@ const Field = {
   type: String
 , set: _set
 , validate: [ _validate, 'Email {{VALUE}} inválido!' ]
-, required: true
+//, required: true
 , index: true
 }
 

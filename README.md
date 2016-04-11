@@ -2255,16 +2255,48 @@ Mas cuidado ele:
 
 
 ### Aula 08 - 4/6
-#### [Mongoose Middleware]()
-- [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gfdaaa5a3a_5_39)
+#### [Mongoose Middleware](http://mongoosejs.com/docs/middleware.html)
+- [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gfdcd8d90e_2_175)
 - [Vídeo](https://www.youtube.com/watch?v=xR3ex_YjQyc)
+
+#### Resumo
+
+Middleware são conhecido por usarem as funções e pre e post , elas são chamada de forma assíncrona durante a execução de um model, eles trabalhão a nível de schema e são muito ótimos para serem usados com plugins, como visto na aula de plugins.
+
+Na versão 4.x+ do mongoose existem dois *tipos de middlewares* segundo a documentação, os de *documento* e de *consulta*, nessa apostila sera mostrando alguns exemplos, a lista abaixo e para demonstrar a funções suportadas.
+
+Documentos:
+- [init](http://mongoosejs.com/docs/api.html#document_Document-init)
+- [validate](http://mongoosejs.com/docs/api.html#document_Document-validate)
+- [save](http://mongoosejs.com/docs/api.html#model_Model-save)
+- [remove](http://mongoosejs.com/docs/api.html#model_Model-remove)
+
+Consultas:
+- [count](http://mongoosejs.com/docs/api.html#query_Query-count)
+- [find](http://mongoosejs.com/docs/api.html#query_Query-find)
+- [findOne](http://mongoosejs.com/docs/api.html#query_Query-findOne)
+- [findOneAndRemove](http://mongoosejs.com/docs/api.html#query_Query-findOneAndRemove)
+- [findOneAndUpdate](http://mongoosejs.com/docs/api.html#query_Query-findOneAndUpdate)
+- [update](http://mongoosejs.com/docs/api.html#query_Query-update)
+
+Os middlewares proporcionam poder aos schemas.
+
+2 tipos de middleware, serial e paralelo:
+- Serial: para implementações pequenas
+- Paralelo: para implementações grandes
+
+
+### Aula 08 - 5/6
+#### []()
+- [Slides]()
+- [Vídeo](https://www.youtube.com/watch?v=VRGI-R_PxpQ)
 
 #### Resumo
 
 
 
 ### Aula ESPECIAL
-#### [ES6]()
+#### [ES6](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/module-nodejs/pt-br/es6.md)
 - [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gebeab41d1_0_382)
 - [Vídeo](https://www.youtube.com/watch?v=sw7kPzkIN4g)
 

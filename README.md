@@ -2287,13 +2287,278 @@ Os middlewares proporcionam poder aos schemas.
 
 
 ### Aula 08 - 5/6
-#### []()
-- [Slides]()
+#### [Moongoose - ]()
 - [Vídeo](https://www.youtube.com/watch?v=VRGI-R_PxpQ)
 
 #### Resumo
+Nesta aula o projeto mongoose-user foi refatorado para melhor se adaptar aos
+conceitos do Atomic Design.
+
+### Aula 08 - 6/6
+#### [Mongoose - Atomic Design]()
+- [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gfe5560ab3_1_4)
+- [Vídeo](https://www.youtube.com/watch?v=3Hq7O7TeXjw)
+
+#### Resumo
+Essa estrutura que eu utilizo é baseada no Atomic Design que utilizo no front-end, porém eu modifiquei
+um pouco essa metodologia para adicionar a parte
+de Comportamento para que eu pudesse
+estender ela com novas funcionalidades.
+
+Cada átomo possui um comportamento padrão que pode ser sobrescrito quando adicionado em uma molécula, também podendo mudar quando
+adicionado em um organismo.
+
+##### Átomos
+O Átomo é a menor parte indivisível do Mongoose.
+
+Como visto anteriormente a parte *indivisível* da nossa arquitetura é o Field, o qual possui seus atributos, eles sendo os quarks.
+
+```js
+const _get = (v) => v.toUpperCase();
+const _set = (v) => v.toLowerCase();
+const _validate = (v) => v.length > 3;
+
+const Field = {
+    type: String
+  , get: _get
+  , set: _set
+  , validate: [_validate, 'Nome precisa ser maior que 3 caracteres']
+  , required: true
+  , index: true
+}
+
+module.exports = Field;
+```
+
+##### Quarks
+Levando isso em consideração podemos dizer que as partes que formam nosso átomo são os quarks:
+
+- type
+- get
+- set
+- validate
+- required
+- index
+
+Refatorando o código, *validate*:
+```js
+const quark_get = (v) => v.toUpperCase();
+const quark_set = (v) => v.toLowerCase();
+const quark_validate = {
+        validator: function(v) {
+          return v >= 18;
+        }
+      , message: 'Nome {VALUE} precisa ser maior que 3 caracteres'
+      };
+
+const Atom = {
+  type: String
+, get: quark_get
+, set: quark_set
+, validate: quark_validate
+, required: true
+, index: true
+}
+
+module.exports = Atom;
+```
+
+Separando em arquivos os quarks que são funções ou objetos, pois podemos reaproveitá-las futuramente:
+```js
+// quark-toUpper.js
+module.exports = (v) => v.toUpperCase();
 
 
+// quark-toLower.js
+module.exports = (v) => v.toLowerCase();
+
+// quark-validate-string-lengthGTE3
+module.exports = {
+  validator: (v) => v >= 18
+, message: 'Nome {VALUE} precisa ser maior que 3 caracteres'
+};
+```
+
+Com isso o arquivo do átomo ficou assim:
+```js
+const Atom = {
+  type: String
+, get: require('./../quarks/quark-toUpper')
+, set: require('./../quarks/quark-toLower')
+, validate: require('./../quarks/quark-validate-string-lengthGTE3')
+, required: true
+, index: true
+}
+
+module.exports = Atom;
+```
+
+##### Molécula
+A Molécula é um agrupamento de 2 ou mais átomos
+para compor um objeto mais complexo a
+partir de partes simples.
+
+
+Sabendo que o Field é o Átomo logicamente a Molécula será o Schema, então vamos utilizar o seguinte Schema:
+```js
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const Molecule = {
+  name: require('./fields/field-name')
+}
+
+module.exports = new Schema(Molecule);
+```
+
+##### Organismo
+O Organismo será o agrupamento de moléculas, o qual será o objeto a ser utilizado pelo sistema, o Model.
+
+Como o Organismo possui seu próprio Comportamento(Behavior), podemos separar
+suas funções desse arquivo
+
+```js
+const mongoose = require('mongoose');
+const url = require('url');
+const querystring = require('querystring');
+const Schema = require('./schema');
+const User = mongoose.model('User', Schema);
+const callback = (err, data, res) => {
+    if (err) return console.log('Erro:', err);
+  res.writeHead(200, {'Content-Type': 'application/json'});
+  return res.end(JSON.stringify(data));
+};
+const getQuery = (_url) => {
+  const url_parts = url.parse(_url);
+  return querystring.parse(url_parts.query);
+};
+const create = require('./actions/action-create');
+const find = require('./actions/action-find');
+const findOne = require('./actions/action-findOne');
+const update = require('./actions/action-update');
+const remove = require('./actions/action-remove');
+
+const CRUD = {
+  create
+, find
+, findOne
+, update
+, remove
+};
+```
+
+Porém perceba que as Actions necessitam do *callback* e do *getQuery*, por isso vamos separá-los também.
+```js
+// action-get-query-http.js
+module.exports = (_url) => {
+  return require('querystring').parse(require('url').parse(_url).query);
+};
+
+// action-response-200-json.js
+module.exports = (err, data, res) => {
+    if (err) return console.log('Erro:', err);
+
+  res.writeHead(200, {'Content-Type': 'application/json'});
+  return res.end(JSON.stringify(data));
+};
+```
+
+Agora as Actions do Field ficam assim.
+```js
+// action-create.js
+const callback = require('./action-response-200-json');
+
+module.exports = (Model) => {
+  return (req, res) => {
+    let queryData = '';
+
+    req.on('data', (data) => {
+      queryData += data;
+    });
+
+    req.on('end', () => {
+      const obj = require('querystring').parse(queryData);
+      Model.create(obj, (err, data) => callback(err, data, res));
+    });
+  };
+};
+
+// action-find.js
+const callback = require('./action-response-200-json');
+const getQuery = require('./action-get-query-http');
+
+module.exports = (Model) => {
+  return (req, res) => {
+    const query = getQuery(req.url);
+    Model.find(query, (err, data) => callback(err, data, res));
+  };
+};
+
+
+// action-findOne
+const callback = require('./action-response-200-json');
+const getQuery = require('./action-get-query-http');
+
+module.exports = (Model) => {
+  return (req, res) => {
+    const query = getQuery(req.url);
+    Model.findOne(query, (err, data) => callback(err, data, res));
+  };
+};
+
+// action-update
+const callback = require('./action-response-200-json');
+const getQuery = require('./action-get-query-http');
+
+module.exports = (Model) => {
+  return (req, res) => {
+    let queryData = '';
+    req.on('data', (data) => {
+      queryData += data;
+    });
+
+    req.on('end', () => {
+      const mod = require('querystring').parse(queryData);
+      const query = getQuery(req.url);
+      Model.update(query, mod, (err, data) => callback(err, data, res));
+    });
+  };
+};
+
+// action-remove
+const callback = require('./action-response-200-json');
+const getQuery = require('./action-get-query-http');
+
+module.exports = (Model) => {
+  return (req, res) => {
+    const query = getQuery(req.url);
+    User.remove(query, (err, data) => callback(err, data, res));
+  };
+};
+```
+
+Logo atomizamos as 4 funções do CRUD para que possa ser reaproveitado em todos nossos futuros sistemas.
+
+
+Agora o Organismo ficou assim
+```js
+require('./db/config');
+const mongoose = require('mongoose');
+const Schema = require('./schema');
+const Model = mongoose.model('User', Schema);
+const create = require('./actions/action-create')(Model);
+const find = require('./actions/action-find')(Model);
+const findOne = require('./actions/action-findOne')(Model);
+const update = require('./actions/action-update')(Model);
+const remove = require('./actions/action-remove')(Model);
+
+module.exports = {
+  create
+, find
+, findOne
+, update
+, remove
+};
+```
 
 ### Aula ESPECIAL
 #### [ES6](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/module-nodejs/pt-br/es6.md)

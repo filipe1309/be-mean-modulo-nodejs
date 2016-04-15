@@ -116,7 +116,7 @@ const bandsSchema = new Schema({
 });
 
 // Definição do Model
-var BandsModel = mongoose.model('bands', bandsSchema);
+const BandsModel = mongoose.model('bands', bandsSchema);
 
 const band1 = {
     name: 'Manonas assassinas'
@@ -124,29 +124,29 @@ const band1 = {
 
 // 3 métodos - sem exec()
 
-let findPromise = BandsModel.find({name: 'Linkin Park'});
+const findPromise = BandsModel.find({name: 'Linkin Park'});
 findPromise.then(success, error);
 // [ { name: 'Linkin Park', _id: 56ff424dcb3f181e1d0ae7a6 } ]
 
-let createPromise = BandsModel.create(band1)
+const createPromise = BandsModel.create(band1)
 createPromise.then(success , error);
 // { _id: 56ff4d03d20057e62669be34, name: 'Manonas assassinas', __v: 0 }
 
-let removePromise = BandsModel.remove({name : band1.name });
+const removePromise = BandsModel.remove({name : band1.name });
 removePromise.then(success , error);
 // result: { ok: 1, n: 1 }
 
 // 3 métodos - com exec()
 
-let findPromise = BandsModel.find({name: 'Ramones'}).exec();
-findPromise.then(success, error);
+const findPromiseExec = BandsModel.find({name: 'Ramones'}).exec();
+findPromiseExec.then(success, error);
 //[ { name: 'Ramones', _id: 56ff422bcb3f181e1d0ae7a5 } ]
 
-let findOnepromise = BandsModel.findOne({ name: 'Metallica' }).exec();
+const findOnepromise = BandsModel.findOne({ name: 'Metallica' }).exec();
 findOnepromise.then(success , error);
 //{ name: 'Metallica', _id: 56ff3ef8cb3f181e1d0ae7a4 }
 
-let updatePromise = BandsModel.update({ name : 'Metallica'}, {name: '+Metallica'}).exec();
+const updatePromise = BandsModel.update({ name : 'Metallica'}, {name: '+Metallica'}).exec();
 updatePromise.then(success , error);
 //{ ok: 1, nModified: 1, n: 1 }
 

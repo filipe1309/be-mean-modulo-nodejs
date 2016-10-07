@@ -1566,8 +1566,8 @@ A fim de facilitar seu re-uso e manutenção.
 
 ### Aula 08 - 2/6
 #### [Validate]()
-- [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gfd4f1232f_155_6)
-- [Vídeo](https://www.youtube.com/watch?v=_wj0y_77CYs)
+ - [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gfd4f1232f_155_6)
+ - [Vídeo](https://www.youtube.com/watch?v=_wj0y_77CYs)
 
 #### Resumo
 
@@ -2053,8 +2053,8 @@ module.exports = mongoose.model('Post',postschema);
 
 ### Aula 08 - 3/6
 #### [Indexes]()
-- [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gfdaaa5a3a_5_39)
-- [Vídeo](https://www.youtube.com/watch?v=8M4pN64BsnU)
+ - [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gfdaaa5a3a_5_39)
+ - [Vídeo](https://www.youtube.com/watch?v=8M4pN64BsnU)
 
 #### Resumo
 
@@ -2256,8 +2256,8 @@ Mas cuidado ele:
 
 ### Aula 08 - 4/6
 #### [Mongoose Middleware](http://mongoosejs.com/docs/middleware.html)
-- [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gfdcd8d90e_2_175)
-- [Vídeo](https://www.youtube.com/watch?v=xR3ex_YjQyc)
+ - [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gfdcd8d90e_2_175)
+ - [Vídeo](https://www.youtube.com/watch?v=xR3ex_YjQyc)
 
 #### Resumo
 
@@ -2288,7 +2288,7 @@ Os middlewares proporcionam poder aos schemas.
 
 ### Aula 08 - 5/6
 #### [Moongoose - ]()
-- [Vídeo](https://www.youtube.com/watch?v=VRGI-R_PxpQ)
+ - [Vídeo](https://www.youtube.com/watch?v=VRGI-R_PxpQ)
 
 #### Resumo
 Nesta aula o projeto mongoose-user foi refatorado para melhor se adaptar aos
@@ -2296,8 +2296,10 @@ conceitos do Atomic Design.
 
 ### Aula 08 - 6/6
 #### [Mongoose - Atomic Design]()
-- [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gfe5560ab3_1_4)
-- [Vídeo](https://www.youtube.com/watch?v=3Hq7O7TeXjw)
+ - [Slides](https://docs.google.com/presentation/d/1_CHh_fTkzgxAnxB3MlZ5WRhTqMLViMk__jkCZiZ3IMA/edit#slide=id.gfe5560ab3_1_4)
+ - [Vídeo](https://www.youtube.com/watch?v=3Hq7O7TeXjw)
+ - [Descrição do exercício](https://github.com/Webschool-io/be-mean-instagram/blob/master/Apostila/classes/nodejs/exercises/class-08.md)
+ - [Resolução do exercício](https://github.com/filipe1309/be-mean-modulo-nodejs/blob/master/exercises/class-08-resolved-filipe1309-filipe-leuch-bonfim.md)
 
 #### Resumo
 Essa estrutura que eu utilizo é baseada no Atomic Design que utilizo no front-end, porém eu modifiquei
